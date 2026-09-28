@@ -1,26 +1,84 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700;800&family=Gentium+Book+Plus:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg: #e9dfcd;
+  --color-text: #201e1d;
+  --color-neutral-700: #555351;
+  --color-neutral-300: #d0c8be;
+  
+  --color-accent: #f28b3f;
+  --color-accent-100: #fce7d8;
+  --color-accent-300: #f8c199;
+  --color-accent-600: #e56b1f;
+  --color-accent-700: #cd5a16;
+  --color-accent-800: #a74811;
+  
+  --color-accent-2: #6f9c8d;
+  --color-accent-2-100: #e2edea;
+  --color-accent-2-300: #a3c4b9;
+  --color-accent-2-800: #3a554c;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-bg);
+  font-family: "Figtree", "Noto Sans KR", sans-serif;
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.ws-theme {
+  --ground: var(--color-bg);
+  --card: #fffaf1;
+  --tile: #fffdf8;
+  --ink: var(--color-text);
+  --muted: var(--color-neutral-700);
+  --line: var(--color-neutral-300);
+  --accent: var(--color-accent);
+  --accent-soft: var(--color-accent-100);
+  --accent-ink: var(--color-accent-800);
+  --bd-cur: var(--color-accent-300);
+  --btn: var(--color-accent-600);
+  --btn-hover: var(--color-accent-700);
+  --on-accent: #fffaf1;
+  --sage: var(--color-accent-2);
+  --tile-done: var(--color-accent-2-100);
+  --bd-done: var(--color-accent-2-300);
+  --sage-ink: var(--color-accent-2-800);
+  --wrong: oklch(.58 .15 28);
+  --wrong-soft: oklch(.94 .03 28);
+  --wrong-ink: oklch(.45 .13 28);
+}
+
+.gk {
+  font-family: "Gentium Book Plus", Georgia, serif;
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(6px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.pop-anim {
+  animation: pop .2s ease-out;
+}
+
+.ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.ic svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  stroke-width: 2.75;
 }
