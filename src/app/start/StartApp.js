@@ -110,6 +110,9 @@ function Welcome({ narrow, onLogin, signing }) {
               <span style={{ font: "800 15px 'Noto Sans KR',sans-serif", color: '#fffaf1' }}>Google로 시작하기</span>
             </button>
           </div>
+          <Link href="/privacy" style={{ font: "500 12.5px 'Noto Sans KR',sans-serif", color: 'var(--muted)', textDecoration: 'underline', alignSelf: 'flex-start', marginTop: narrow ? -8 : -14, ...rise(0.36) }}>
+            개인정보처리방침
+          </Link>
         </div>
 
         {/* 아치 안 요한복음 1:1 (장식) */}
