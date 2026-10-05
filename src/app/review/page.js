@@ -1,7 +1,7 @@
 import { requireLogin } from '@/lib/guard';
-import LessonMenu from './LessonMenu';
+import ReviewApp from './ReviewApp';
 
 export default async function Page() {
   await requireLogin();
-  return <LessonMenu />;
+  return <ReviewApp />;
 }

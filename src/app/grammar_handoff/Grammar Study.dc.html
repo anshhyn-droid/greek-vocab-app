@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/styles.css">
+<script src="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700;800&family=Gentium+Book+Plus:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+body{margin:0;background:var(--color-bg);font-family:"Figtree","Noto Sans KR",sans-serif}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}
+.ic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ic svg{width:100%;height:100%;display:block;stroke-width:2.75}
+.gs{--ground:var(--color-bg);--card:#fffaf1;--tile:#fffdf8;--ink:var(--color-text);--muted:var(--color-neutral-700);--line:var(--color-neutral-300);--accent:var(--color-accent);--accent-soft:var(--color-accent-100);--accent-ink:var(--color-accent-800);--bd-cur:var(--color-accent-300);--btn:var(--color-accent-600);--btn-hover:var(--color-accent-700);--on-accent:#fffaf1;--sage:var(--color-accent-2);--tile-done:var(--color-accent-2-100);--bd-done:var(--color-accent-2-300);--sage-ink:var(--color-accent-2-800);--wrong:oklch(.58 .15 28);--wrong-soft:oklch(.94 .03 28);--wrong-ink:oklch(.45 .13 28)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" class="gs" data-screen-label="문법 학습" style="min-height:100vh;background:var(--ground);color:var(--ink)">
+
+  <div style="max-width:1080px;margin:0 auto;padding:22px 28px 0;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <div style="flex:1;min-width:220px;display:flex;flex-direction:column;gap:3px">
+      <span style="font:800 11px 'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--accent-ink)">제3과 · 문법</span>
+      <span style="font-family:'Caprasimo',serif;font-size:28px;color:var(--ink)">동사의 기초</span>
+    </div>
+    <span style="padding:7px 14px;border-radius:999px;background:var(--accent-soft);border:1.5px solid var(--bd-cur);font:800 12.5px 'Figtree',sans-serif;color:var(--accent-ink);font-variant-numeric:tabular-nums">{{ countLabel }}</span>
+    <span onClick="{{ restart }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;border:1.5px solid var(--line);font:700 12.5px 'Noto Sans KR',sans-serif;color:var(--muted)" style-hover="background:var(--tile);color:var(--ink)"><span class="ic" style="width:14px;height:14px"><i data-lucide="rotate-ccw"></i></span>처음부터</span>
+  </div>
+  <div style="max-width:1080px;margin:14px auto 0;padding:0 28px;box-sizing:border-box">
+    <div style="height:9px;border-radius:999px;background:var(--line);overflow:hidden">
+      <div style="height:100%;width:{{ prog }};border-radius:999px;background:var(--accent);transition:width .3s"></div>
+    </div>
+  </div>
+
+  <div style="max-width:1080px;margin:0 auto;padding:24px 28px 48px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+
+    <div style="flex:1 1 520px;min-width:0;display:flex;flex-direction:column;gap:16px">
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:60px 24px;border-radius:26px;background:var(--card);border:1.5px solid var(--line);text-align:center;font:600 13px 'Noto Sans KR',sans-serif;color:var(--muted)">문항을 불러오는 중입니다</div>
+      </sc-if>
+
+      <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:30px 30px 26px;border-radius:26px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;gap:14px;animation:pop .2s ease-out">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="padding:5px 12px;border-radius:999px;background:var(--tile-done);border:1.5px solid var(--bd-done);font:700 11.5px 'Gentium Book Plus','Noto Sans KR',serif;color:var(--sage-ink)">{{ q.t }}</span>
+            <span style="padding:5px 12px;border-radius:999px;border:1.5px solid var(--line);font:700 11px 'Noto Sans KR',sans-serif;color:var(--muted)">난이도 {{ q.lv }}</span>
+            <sc-if value="{{ isRetry }}" hint-placeholder-val="{{ false }}">
+              <span style="padding:5px 12px;border-radius:999px;background:var(--wrong-soft);font:700 11px 'Noto Sans KR',sans-serif;color:var(--wrong-ink)">다시 풀기</span>
+            </sc-if>
+          </div>
+          <span style="font:600 21px/1.55 'Gentium Book Plus','Noto Sans KR',serif;color:var(--ink);text-wrap:pretty;word-break:keep-all">{{ q.p }}</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+          <sc-for list="{{ choices }}" as="c" hint-placeholder-count="4">
+            <div onClick="{{ c.onClick }}" style="position:relative;display:flex;align-items:center;gap:12px;padding:17px 18px;border-radius:22px;transition:background .18s,border-color .18s,color .18s;background:{{ c.bg }};border:1.5px solid {{ c.bd }};color:{{ c.fg }};opacity:{{ c.op }};cursor:{{ c.cur }}" style-hover="filter:brightness(.985)">
+              <span style="width:28px;height:28px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ c.nbg }};font:800 12.5px 'Figtree',sans-serif;color:{{ c.nfg }}">{{ c.n }}</span>
+              <span style="flex:1;font:600 15px/1.5 'Gentium Book Plus','Noto Sans KR',serif;word-break:keep-all">{{ c.t }}</span>
+              <sc-if value="{{ c.ok }}" hint-placeholder-val="{{ false }}"><span class="ic" style="width:18px;height:18px;color:var(--sage)"><i data-lucide="circle"></i></span></sc-if>
+              <sc-if value="{{ c.bad }}" hint-placeholder-val="{{ false }}"><span class="ic" style="width:18px;height:18px;color:{{ c.markc }}"><i data-lucide="x"></i></span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ picked }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:18px 20px;border-radius:24px;background:var(--tile-done);border:1.5px solid var(--bd-done);display:flex;flex-direction:column;gap:8px;animation:pop .22s ease-out">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="ic" style="width:16px;height:16px;color:var(--sage-ink)"><i data-lucide="book-open"></i></span>
+              <span style="flex:1;font:800 13px 'Noto Sans KR',sans-serif;color:var(--sage-ink)">{{ verdict }}</span>
+              <span style="font:700 11.5px 'Noto Sans KR',sans-serif;color:var(--muted)">교재 {{ q.pg }}쪽</span>
+            </div>
+            <span style="font:500 14px/1.7 'Gentium Book Plus','Noto Sans KR',serif;color:var(--ink);word-break:keep-all">{{ q.e }}</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end">
+            <div onClick="{{ next }}" style="padding:14px 30px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:800 14px 'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:var(--btn-hover)" style-active="transform:translateY(1px)">{{ nextCta }}</div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:34px 30px;border-radius:30px;background:var(--tile-done);border:1.5px solid var(--bd-done);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;animation:pop .26s ease-out">
+          <span class="ic" style="width:34px;height:34px;color:var(--sage)"><i data-lucide="party-popper"></i></span>
+          <span style="font-family:'Caprasimo',serif;font-size:24px;color:var(--ink)">문법 문제를 모두 풀었어요</span>
+          <span style="font:500 13px/1.6 'Noto Sans KR',sans-serif;color:var(--muted)">틀린 문제는 다시 풀어 모두 맞혔습니다 · +20 데나리온</span>
+          <div style="margin-top:10px;width:100%;max-width:520px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <sc-for list="{{ stats }}" as="r" hint-placeholder-count="3">
+              <div style="padding:14px 8px;border-radius:22px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:3px">
+                <span style="font:800 18px 'Figtree',sans-serif;color:{{ r.fg }};font-variant-numeric:tabular-nums">{{ r.v }}</span>
+                <span style="font:700 10.5px 'Noto Sans KR',sans-serif;color:var(--muted)">{{ r.k }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ hasMissed }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:6px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:8px;text-align:left">
+              <span style="font:800 11px 'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--muted)">다시 볼 항목</span>
+              <div style="display:flex;flex-wrap:wrap;gap:7px">
+                <sc-for list="{{ missed }}" as="m" hint-placeholder-count="3">
+                  <span style="padding:6px 13px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);font:700 12.5px 'Gentium Book Plus','Noto Sans KR',serif;color:var(--ink)">{{ m.t }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <div onClick="{{ restart }}" style="margin-top:12px;padding:13px 28px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:800 14px 'Noto Sans KR',sans-serif;cursor:pointer" style-hover="background:var(--btn-hover)">다시 풀기</div>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="flex:0 1 300px;min-width:260px;display:flex;flex-direction:column;gap:14px">
+      <div style="padding:20px;border-radius:26px;background:var(--card);border:1.5px solid var(--line);display:flex;flex-direction:column;gap:12px">
+        <span style="font:800 11px 'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--muted)">문항 진행</span>
+        <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="38">
+            <span title="{{ d.id }}" style="aspect-ratio:1;border-radius:999px;background:{{ d.bg }};box-shadow:inset 0 0 0 1.5px {{ d.bd }}"></span>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font:600 11px 'Noto Sans KR',sans-serif;color:var(--muted)">
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;background:var(--sage)"></span>한 번에</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;background:var(--wrong)"></span>다시 풀기</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;background:var(--accent)"></span>지금</span>
+        </div>
+      </div>
+      <div style="padding:18px 20px;border-radius:26px;background:var(--tile);border:1.5px solid var(--line);display:flex;flex-direction:column;gap:6px">
+        <span style="font:800 11px 'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--muted)">풀이 방법</span>
+        <span style="font:500 12.5px/1.7 'Noto Sans KR',sans-serif;color:var(--ink);word-break:keep-all">정답을 고를 때까지 같은 문제가 유지됩니다. 한 번이라도 틀린 문제는 마지막에 다시 나옵니다. 키보드 1–4로 고르고 Enter로 넘어갈 수 있습니다.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const shuffle=a=>{ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+
+class Component extends DCLogic {
+  state = { data:[], q:[], idx:0, order:[], pick:null, wrongs:[], flash:null, firstOk:[], retry:[], missed:[], start:0, time:0, phase:"loading", done:0 };
+  rootRef = React.createRef();
+
+  async componentDidMount(){
+    this.onKey = e=>this.key(e); window.addEventListener("keydown", this.onKey);
+    try { const r = await fetch("grammar_l03.json"); const data = await r.json(); this.setState({ data }, ()=>this.restart()); }
+    catch(e){ this.setState({ phase:"loading" }); }
+    this.icons();
+  }
+  componentDidUpdate(){ this.icons(); }
+  componentWillUnmount(){ window.removeEventListener("keydown", this.onKey); }
+  icons(){ if (window.lucide && this.rootRef.current) window.lucide.createIcons({ root:this.rootRef.current }); }
+
+  restart(){
+    const n=this.state.data.length;
+    this.setState({ q:[...Array(n).keys()], firstOk:[], retry:[], missed:[], done:0, start:Date.now(), time:0 }, ()=>this.load());
+  }
+  load(){
+    const s=this.state, d=s.data[s.q[0]];
+    // 보기는 원래 번호(1~4)를 유지한 채 순서만 섞음
+    this.setState({ phase:"quiz", pick:null, wrongs:[], flash:null, order:shuffle([0,1,2,3]).filter(i=>d.o[i]) });
+  }
+  answer(i){
+    const s=this.state, d=s.data[s.q[0]];
+    if (s.pick!==null || s.wrongs.includes(i)) return;
+    if (i+1===d.a) { this.setState({ pick:i }); return; }
+    this.setState(x=>({ wrongs:[...x.wrongs,i], flash:i }));
+    setTimeout(()=>this.setState(x=>x.flash===i?{flash:null}:{}), 500);
+  }
+  next(){
+    const s=this.state, q=[...s.q], cur=q.shift(), failed=s.wrongs.length>0, id=s.data[cur].id;
+    const upd = failed
+      ? { retry: s.retry.includes(id)?s.retry:[...s.retry,id], missed: s.missed.includes(cur)?s.missed:[...s.missed,cur] }
+      : { firstOk: s.retry.includes(id)?s.firstOk:[...s.firstOk,id], done:s.done+1 };
+    if (failed) q.push(cur);
+    if (!q.length) { this.setState({ ...upd, q, phase:"end", time:Math.max(1,Math.round((Date.now()-s.start)/1000)) }); return; }
+    this.setState({ ...upd, q }, ()=>this.load());
+  }
+  key(e){
+    const s=this.state; if (s.phase!=="quiz") return;
+    if (/^[1-4]$/.test(e.key)) { const pos=+e.key-1; if (s.order[pos]!==undefined) this.answer(s.order[pos]); }
+    if (e.key==="Enter" && s.pick!==null) this.next();
+  }
+
+  renderVals(){
+    const st=this.state, n=st.data.length||1, d=st.data[st.q[0]]||{o:[],t:"",p:"",e:"",pg:"",lv:""};
+    const curId=d.id, firstTry=st.firstOk.length, pct=Math.round(firstTry/n*100);
+    return {
+      rootRef:this.rootRef,
+      loading: st.phase==="loading", isQuiz: st.phase==="quiz", isEnd: st.phase==="end",
+      q:d,
+      isRetry: st.retry.includes(curId),
+      countLabel: st.phase==="end" ? n+" / "+n : Math.min(st.done+1,n)+" / "+n,
+      prog: Math.round(st.done/n*100)+"%",
+      picked: st.pick!==null,
+      verdict: st.wrongs.length ? "정답은 "+(st.order.indexOf(d.a-1)+1)+"번입니다" : "정답이에요",
+      nextCta: st.q.length<=1 && st.wrongs.length===0 ? "결과 보기" : "다음 문제",
+      choices: st.order.map((i,pos)=>{
+        const right=i+1===d.a, ok=right&&st.pick===i, flash=st.flash===i, dead=st.wrongs.includes(i)&&!flash;
+        return { n:String(pos+1), t:d.o[i], ok, bad:flash||dead,
+          bg: ok?"var(--tile-done)":flash?"var(--wrong-soft)":"var(--tile)",
+          bd: ok?"var(--bd-done)":flash?"var(--wrong)":"var(--line)",
+          fg: ok?"var(--sage-ink)":flash?"var(--wrong-ink)":dead?"var(--muted)":"var(--ink)",
+          nbg: ok?"var(--sage)":flash?"var(--wrong)":"var(--accent-soft)",
+          nfg: ok||flash?"var(--on-accent)":"var(--accent-ink)",
+          markc: flash?"var(--wrong)":"var(--muted)",
+          op: dead?"0.45":"1", cur: dead||st.pick!==null?"default":"pointer",
+          onClick:()=>this.answer(i) };
+      }),
+      next:()=>this.next(),
+      restart:()=>this.restart(),
+      dots: st.data.map(x=>{ const now=x.id===curId&&st.phase==="quiz", ok=st.firstOk.includes(x.id), re=st.retry.includes(x.id);
+        return { id:x.id, bg: now?"var(--accent)":ok?"var(--sage)":re?"var(--wrong)":"transparent",
+          bd: now?"var(--accent)":ok?"var(--sage)":re?"var(--wrong)":"var(--line)" }; }),
+      stats:[
+        { k:"한 번에 맞힘", v:pct+"%", fg: pct>=90?"var(--sage-ink)":"var(--ink)" },
+        { k:"소요 시간", v: Math.floor(st.time/60)+":"+String(st.time%60).padStart(2,"0"), fg:"var(--ink)" },
+        { k:"획득 XP", v:"+"+(n*3+(pct>=90?10:0)), fg:"var(--accent-ink)" }
+      ],
+      hasMissed: st.missed.length>0,
+      missed: st.missed.map(i=>({ t:(st.data[i]||{}).t }))
+    };
+  }
+}
+</script>
+</body>
+</html>

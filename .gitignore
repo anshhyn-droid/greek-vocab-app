@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 개발용 SQLite (사용자 기록이 들어 있음. 배포는 Turso)
+/data/db.sqlite*

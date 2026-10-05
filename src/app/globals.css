@@ -1,84 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Figtree:wght@400;600;700;800&family=Gentium+Book+Plus:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+@import '../styles/tokens.css';
 
-:root {
-  --color-bg: #e9dfcd;
-  --color-text: #201e1d;
-  --color-neutral-700: #555351;
-  --color-neutral-300: #d0c8be;
-  
-  --color-accent: #f28b3f;
-  --color-accent-100: #fce7d8;
-  --color-accent-300: #f8c199;
-  --color-accent-600: #e56b1f;
-  --color-accent-700: #cd5a16;
-  --color-accent-800: #a74811;
-  
-  --color-accent-2: #6f9c8d;
-  --color-accent-2-100: #e2edea;
-  --color-accent-2-300: #a3c4b9;
-  --color-accent-2-800: #3a554c;
-}
-
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
 body {
-  margin: 0;
   background: var(--color-bg);
-  font-family: "Figtree", "Noto Sans KR", sans-serif;
-  color: var(--color-text);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  color: var(--ink);
+  font-family: 'Figtree', 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
+a { color: var(--color-accent-700); text-decoration: none; }
+a:hover { color: var(--color-accent-800); }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
-* {
-  box-sizing: border-box;
-}
+/* Lucide 아이콘 상자 (선 두께 2.75) */
+.ic { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.ic svg { width: 100%; height: 100%; display: block; }
+.starfill svg { fill: currentColor; }
 
-.ws-theme {
-  --ground: var(--color-bg);
-  --card: #fffaf1;
-  --tile: #fffdf8;
-  --ink: var(--color-text);
-  --muted: var(--color-neutral-700);
-  --line: var(--color-neutral-300);
-  --accent: var(--color-accent);
-  --accent-soft: var(--color-accent-100);
-  --accent-ink: var(--color-accent-800);
-  --bd-cur: var(--color-accent-300);
-  --btn: var(--color-accent-600);
-  --btn-hover: var(--color-accent-700);
-  --on-accent: #fffaf1;
-  --sage: var(--color-accent-2);
-  --tile-done: var(--color-accent-2-100);
-  --bd-done: var(--color-accent-2-300);
-  --sage-ink: var(--color-accent-2-800);
-  --wrong: oklch(.58 .15 28);
-  --wrong-soft: oklch(.94 .03 28);
-  --wrong-ink: oklch(.45 .13 28);
-}
+/* 누를 수 있는 것: 마우스를 올리면 커지고, 누르면 0.96배 */
+.press, .press-card, .press-icon, .press-sm { cursor: pointer; transition: transform 0.2s var(--spring); }
+.press:hover { transform: scale(1.05); }
+.press-card:hover { transform: scale(1.02); }
+.press-icon:hover { transform: scale(1.15); }
+.press-sm:hover { transform: scale(1.03); }
+.press-unit:hover { transform: scale(1.08); }
+.press:active, .press-card:active, .press-icon:active, .press-sm:active, .press-unit:active { transform: scale(0.96); }
+.press-unit { cursor: pointer; transition: background 0.12s, transform 0.2s var(--spring); }
+.off, .off:hover, .off:active { transform: none; cursor: default; }
 
-.gk {
-  font-family: "Gentium Book Plus", Georgia, serif;
-}
+/* 올렸을 때 색 */
+.h-btn:not(.off):hover { background: var(--btn-hover) !important; }
+.h-tile:not(.off):hover { background: var(--tile) !important; color: var(--ink) !important; }
+.h-card:not(.off):hover { background: var(--card) !important; color: var(--ink) !important; }
+.h-soft:not(.off):hover { background: var(--accent-soft) !important; }
+.h-ink:hover { color: var(--ink) !important; }
+.h-dim:hover { opacity: 0.7; }
+.h-lift:hover { box-shadow: var(--sh-lift); }
+.h-bright:not(.off):hover { filter: brightness(0.985); }
+.h-edge:not(.off):hover { border-color: var(--color-neutral-500) !important; }
 
-@keyframes pop {
-  from { opacity: 0; transform: translateY(6px) scale(.98); }
-  to { opacity: 1; transform: none; }
-}
+/* 헬라어 글자 (크기는 --gk-scale을 곱함) */
+.gk { font-family: var(--f-gk); }
+.gk-serif { font-family: var(--f-serif); }
+.gk-run { font-size: calc(1em * var(--gk-scale)); }
 
-.pop-anim {
-  animation: pop .2s ease-out;
-}
-
-.ic {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-}
-.ic svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  stroke-width: 2.75;
-}
+@keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nudge { 0%, 100% { transform: none; } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }

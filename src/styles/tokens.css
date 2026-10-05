@@ -1,0 +1,79 @@
+/* 공통 디자인 토큰 — 시안 6개(과 메뉴·단어·문법·문장·시작·암기)가 함께 쓰는 값
+   Organic 디자인 시스템(_ds/organic-…/styles.css)의 색 + 시안의 별칭(--card, --ink …) */
+
+:root {
+  /* Organic 색 */
+  --color-bg: #f5ead8;
+  --color-text: #201e1d;
+  --color-accent: #c67139;
+  --color-accent-2: #7a8a5e;
+
+  --color-neutral-100: #f9f4ed;
+  --color-neutral-200: #eee7db;
+  --color-neutral-300: #dcd3c4;
+  --color-neutral-400: #c0b6a5;
+  --color-neutral-500: #a19786;
+  --color-neutral-700: #645c50;
+
+  --color-accent-100: #fff2eb;
+  --color-accent-200: #ffe1d0;
+  --color-accent-300: #ffc6a5;
+  --color-accent-600: #b2622d;
+  --color-accent-700: #8c491a;
+  --color-accent-800: #643312;
+
+  --color-accent-2-100: #f0fae1;
+  --color-accent-2-300: #ccdbb2;
+  --color-accent-2-800: #3d472b;
+
+  /* 시안 별칭 */
+  --ground: var(--color-bg);
+  --card: #fffaf1;
+  --tile: #fffdf8;
+  --ink: var(--color-text);
+  --muted: var(--color-neutral-700);
+  --line: var(--color-neutral-300);
+  --accent: var(--color-accent);
+  --accent-soft: var(--color-accent-100);
+  --accent-ink: var(--color-accent-800);
+  --bd-cur: var(--color-accent-300);
+  --btn: var(--color-accent-600);
+  --btn-hover: var(--color-accent-700);
+  --on-accent: #fffaf1;
+  --sage: var(--color-accent-2);
+  --tile-done: var(--color-accent-2-100);
+  --bd-done: var(--color-accent-2-300);
+  --sage-ink: var(--color-accent-2-800);
+  /* 오답: 디자인 시스템에 없어 따로 지정 */
+  --wrong: oklch(0.58 0.15 28);
+  --wrong-soft: oklch(0.94 0.03 28);
+  --wrong-ink: oklch(0.45 0.13 28);
+  --scrim: rgba(32, 30, 29, 0.42);
+
+  /* 글꼴 */
+  --f-head: 'Caprasimo', serif;
+  --f-ui: 'Noto Sans KR', sans-serif;
+  --f-num: 'Figtree', sans-serif;
+  --f-gk: 'Gentium Book Plus', Georgia, serif; /* 단어·문법 헬라어 */
+  --f-gk-mix: 'Gentium Book Plus', 'Noto Sans KR', serif; /* 헬라어·한글 섞인 문법 문장 */
+  --f-serif: 'Noto Serif', serif; /* 문장·암기·시작 헬라어 (다중 강세 부호) */
+  --f-serif-mix: 'Noto Serif', 'Noto Sans KR', serif;
+  --f-serif-kr: 'Noto Serif KR', serif;
+
+  /* 모서리 */
+  --r-card: 26px;
+  --r-card-lg: 30px;
+  --r-choice: 20px;
+  --r-choice-lg: 22px;
+  --r-pill: 999px;
+
+  /* 그림자 */
+  --sh-dialog: 0 24px 50px -24px rgba(32, 30, 29, 0.55);
+  --sh-lift: 0 10px 22px -18px rgba(32, 30, 29, 0.45);
+
+  /* 눌림 효과 */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* 그리스어 글자 크기 (설정: 기본 1 · 1.2 · 1.4). <html>에서 덮어씀 */
+  --gk-scale: 1;
+}
