@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>:root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}</style>
+<link rel="stylesheet" href="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/styles.css">
+<script src="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,700&family=Hahmlet:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="greek-font.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="gk-session.js"></script>
+<script src="xp-fly.js"></script>
+<script src="gk-notes.js"></script>
+<style>
+html,body{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}body{margin:0;background:var(--color-bg);font-family:"Gentium Greek","Pretendard Variable",Pretendard,sans-serif}
+a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-accent-800)}
+.ic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ic svg{width:100%;height:100%;display:block;stroke-width:2.75}
+.starfill svg{fill:currentColor}
+.gk{font-family:"Gentium Book Plus",Georgia,serif}
+.app{--ground:#f5ead8;--card:#fffaf1;--tile:#fffdf8;--ink:#201e1d;--muted:oklch(.455 .018 45);--line:#e8dcc6;--accent:#c67139;--accent-soft:#ffe1d0;--accent-ink:#8c491a;--tile-cur:#ffe8d6;--bd-cur:#eeb98d;--btn:#a85c2b;--btn-hover:#8a4720;--btn-plate:#cf8550;--on-accent:oklch(.975 .006 85);--sage:#7a8a5e;--sage-soft:#e1eecc;--sage-ink:#56633f;--tile-done:#e7efd6;--bd-done:#c3d2a4;--wrong:#c0453a;--wrong-soft:#fbe4e0;--wrong-ink:#9b2f27;--glow:rgba(112,58,20,.13)}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes nudge{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" class="app" style="min-height:100vh;padding-top:var(--sat);padding-bottom:var(--sab);box-sizing:border-box;background:var(--ground);color:var(--ink);display:flex;align-items:stretch">
+
+  <sc-if value="{{ leaveOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stay }}" style="position:fixed;inset:0;z-index:60;background:rgba(32,30,29,.42);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:380px;padding:26px 24px 20px;border-radius:30px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);box-shadow:0 24px 50px -24px rgba(32,30,29,.55);display:flex;flex-direction:column;gap:12px;animation:pop .2s ease-out">
+        <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:20px;color:var(--ink)">테스트를 그만할까요?</span>
+        <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all"><b style="color:var(--wrong-ink)">지금 나가면 이번 테스트의 경험치와 기록이 남지 않습니다.</b> 틀린 문항은 오답 노트에 남고, 다시 시작하면 처음부터 풉니다.</span>
+        <div style="display:flex;gap:9px;margin-top:6px">
+          <div onClick="{{ stay }}" style="flex:1.3;cursor:pointer;padding:13px;text-align:center;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">계속 풀기</div>
+          <div onClick="{{ quitNow }}" style="flex:1;cursor:pointer;padding:13px;text-align:center;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">나가기</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showSide }}" hint-placeholder-val="{{ true }}">
+    <aside style="width:228px;flex:none;position:sticky;top:0;height:100vh;box-sizing:border-box;padding:30px 16px;border-right:1.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:30px">
+      <a href="Start.dc.html" title="앱 이름 자리 — 이름이 정해지면 교체" style="padding:0 14px;font-family:'Gentium Book Plus',serif;font-style:italic;font-weight:700;font-size:27px;line-height:1;color:var(--accent)">Ἑλληνική</a>
+      <nav style="display:flex;flex-direction:column;gap:6px">
+        <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3">
+          <a href="{{ t.href }}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:999px;background:{{ t.bg }};border:1.5px solid {{ t.bd }};color:{{ t.fg }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)"><span class="ic" style="width:19px;height:19px"><i data-lucide="{{ t.icon }}"></i></span>{{ t.label }}</a>
+        </sc-for>
+      </nav>
+    </aside>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+  <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="테스트" style="width:100%;max-width:{{ rvMax }};margin:0 auto;padding:{{ pad }};box-sizing:border-box;display:flex;flex-direction:column;align-items:{{ rvAI }};justify-content:center;min-height:{{ rvMinH }};gap:0;animation:pop .3s ease-out">
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:{{ h1 }};line-height:1.15;color:var(--ink)">테스트</span>
+        <span style="font:600 14px/1.55 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">설명 없이 문제만 빠르게 넘기며 외웁니다.</span>
+      </div></sc-if>
+
+      <div style="display:flex;flex-direction:column">
+      
+      <div style="position:relative;{{ rvBook }}">
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;top:0;bottom:0;left:50%;width:64px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(46,43,37,0),rgba(46,43,37,.06) 42%,rgba(46,43,37,.12) 50%,rgba(46,43,37,.06) 58%,rgba(46,43,37,0));pointer-events:none;z-index:0"></div></sc-if>
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><nav style="position:absolute;right:-60px;top:11px;bottom:11px;z-index:3;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3"><a href="{{ t.href }}" onClick="{{ t.onClick }}" title="{{ t.label }}" style="width:47px;flex:1;min-height:110px;border-radius:0 16px 16px 0;background:{{ t.rbg }};box-shadow:{{ t.rsh }};display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none" style-hover="filter:brightness(1.05)"><span style="writing-mode:vertical-rl;white-space:nowrap;font:700 18px 'Hahmlet',serif;letter-spacing:.03em;color:{{ t.rfg }}">{{ t.label }}</span></a></sc-for>
+            </nav></sc-if>
+        <div style="position:relative;z-index:1;height:100%;box-sizing:border-box;overflow-y:auto;scrollbar-width:none;padding:{{ bookPad }};display:grid;grid-template-columns:{{ rvCols }};grid-template-rows:{{ rvRows }};column-gap:72px;row-gap:12px;align-content:start">
+            
+      <div style="grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:10px;min-width:0"><sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;gap:6px"><span style="font:700 28px 'Hahmlet',serif;color:var(--ink)">테스트</span><span style="font:600 14px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all;max-width:300px">설명 없이 문제만 빠르게 넘기며 외웁니다.</span></div></sc-if>
+        <div style="display:flex;align-items:flex-end;gap:6px;padding:0 10px;overflow-x:auto;border-bottom:2px solid #643312;scrollbar-width:none">
+        <sc-for list="{{ segs }}" as="s" hint-placeholder-count="3">
+          <div onClick="{{ s.onClick }}" style="flex:none;cursor:pointer;display:flex;align-items:center;gap:3px;height:{{ s.tabH }};padding:0 {{ tabPadX }};border-radius:14px 14px 0 0;background:{{ s.tabBg }};color:{{ s.tabFg }};font:700 13px 'Pretendard Variable',Pretendard,sans-serif;white-space:nowrap" style-hover="filter:brightness(1.04)">
+            <span class="ic" style="width:13px;height:13px"><i data-lucide="{{ s.icon }}"></i></span>
+            <span>{{ s.label }}</span>
+            <sc-if value="{{ s.hasN }}" hint-placeholder-val="{{ false }}">
+              <span style="min-width:18px;box-sizing:border-box;padding:1px 5px;border-radius:999px;background:{{ s.nbg }};color:{{ s.nfg }};font:700 11px 'Pretendard Variable',Pretendard,sans-serif;text-align:center">{{ s.n }}</span>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div></div>
+      <sc-if value="{{ isTestSeg }}" hint-placeholder-val="{{ true }}">
+        <div style="display:{{ tgDisp }};grid-template-columns:{{ cols }};gap:{{ colGap }};align-items:start;animation:pop .2s ease-out">
+          <div style="display:flex;flex-direction:column;gap:14px;min-width:0;align-self:{{ colAS }};grid-column:{{ lcCol }};grid-row:{{ lcRow }}">
+            <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:{{ boxPad }};border-radius:20px;background:rgba(140,73,26,.05);display:flex;flex-direction:column;gap:10px">
+              <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.08em;color:var(--muted)">종류</span>
+              <div style="display:grid;grid-template-columns:{{ modeCols }};gap:8px">
+                <sc-for list="{{ modes }}" as="m" hint-placeholder-count="4">
+                  <div onClick="{{ m.onClick }}" style="cursor:pointer;user-select:none;padding:{{ modePad }};border-radius:{{ modeR }};display:flex;flex-direction:{{ modeDir }};align-items:center;justify-content:center;gap:6px;background:{{ m.bg }};border:1.5px solid {{ m.bd }};color:{{ m.fg }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">
+                    <span class="ic" style="width:18px;height:18px"><i data-lucide="{{ m.icon }}"></i></span>
+                    <span style="font:700 14px/1.3 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;text-align:center;word-break:keep-all;white-space:{{ modeWs }}">{{ m.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="display:{{ helpD }};font:500 12px/1.55 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">단어·문법·문장은 섞어서 낼 수 있고, 플래시 카드는 단어만 따로 넘깁니다</span>
+            </div>
+            <div onClick="{{ toggleFav }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:20px;background:{{ favBg }};border:1.5px solid {{ favBd }};color:{{ favFg }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)">
+              <span class="ic" style="width:16px;height:16px"><i data-lucide="bookmark"></i></span>
+              <span style="flex:1;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif">책갈피만</span>
+              <span style="font:700 14px 'Pretendard Variable',Pretendard,sans-serif">{{ favCount }}</span>
+            </div>
+          </sc-if>
+            <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font:700 13px 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--accent-ink)">무엇을 풀까요</span>
+                <sc-for list="{{ modes }}" as="m" hint-placeholder-count="4">
+                  <div onClick="{{ m.onClick }}" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:12px;padding:9px 14px;border-radius:18px;background:{{ m.wbg }};transition:background .2s" style-hover="filter:brightness(.98)">
+                    <span style="width:22px;height:22px;flex:none;border-radius:999px;background:{{ m.rbg }};border:2px solid {{ m.rbd }};box-sizing:border-box;display:flex;align-items:center;justify-content:center;font:800 11px 'Pretendard Variable',Pretendard,sans-serif;color:var(--on-accent)">{{ m.chk }}</span>
+                    <span style="font:700 16px 'Pretendard Variable',Pretendard,sans-serif;color:var(--ink);white-space:nowrap">{{ m.label }}</span>
+                    <span style="margin-left:auto;font:600 13px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);white-space:nowrap">{{ m.desc }}</span>
+                  </div>
+                </sc-for>
+                <div onClick="{{ toggleFav }}" style="cursor:pointer;user-select:none;display:flex;align-items:center;gap:9px;padding:6px 4px 0">
+                  <span class="ic" style="width:16px;height:16px;color:var(--accent)"><i data-lucide="bookmark"></i></span>
+                  <span style="font:700 15px 'Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">책갈피만</span>
+                  <span style="font:600 13px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ favCount }}</span>
+                  <span style="margin-left:auto;width:42px;height:24px;flex:none;border-radius:999px;background:{{ swBg }};padding:3px;box-sizing:border-box;display:flex;justify-content:{{ swJ }};transition:background .2s"><span style="width:18px;height:18px;border-radius:999px;background:#fffaf1"></span></span>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;min-width:0;gap:10px;align-self:{{ colAS }};grid-column:{{ rcCol }};grid-row:{{ rcRow }}">
+            <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:18px 19px;border-radius:20px;background:rgba(140,73,26,.05);border:1.5px solid {{ unitBd }};display:flex;flex-direction:column;gap:12px;animation:{{ unitAnim }};transition:border-color .2s">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="flex:1;font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.08em;color:{{ unitLblC }}">과</span>
+                <sc-if value="{{ hasUnits }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ clearUnits }}" style="cursor:pointer;font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)" style-hover="color:var(--ink)">선택 해제</span>
+                </sc-if>
+              </div>
+              <div onPointerDown="{{ unitDown }}" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;touch-action:none;user-select:none">
+                <sc-for list="{{ units }}" as="u" hint-placeholder-count="26">
+                  <div data-n="{{ u.n }}" style="cursor:pointer;padding:{{ unitPad }};text-align:center;border-radius:14px;background:{{ u.bg }};border:1.5px solid {{ u.bd }};font:700 14px 'Pretendard Variable',Pretendard,sans-serif;color:{{ u.fg }};transition:background .12s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.08)">{{ u.n }}</div>
+                </sc-for>
+              </div>
+              <span style="display:{{ helpD }};font:500 12px/1.55 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">누른 채로 끌면 처음 과부터 끝 과까지 한 번에 선택됩니다 · 지금은 제3과에만 문항이 있습니다</span>
+            </div>
+
+            <div style="padding:{{ sumPad }};border-radius:20px;background:rgba(140,73,26,.08);display:flex;flex-direction:column;gap:{{ sumGap }}">
+              <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">
+                <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:24px;line-height:1;color:var(--ink)">{{ sumN }}</span>
+                <span style="display:{{ helpD }};flex:1;min-width:160px;font:600 14px/1.5 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">{{ sumSub }}</span>
+              </div>
+              <div onClick="{{ start }}" style="cursor:pointer;padding:{{ startPad }};border-radius:999px;text-align:center;background:{{ startBg }};color:{{ startFg }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;box-shadow:{{ startSh }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.96)">{{ startLabel }}</div>
+            </div>
+          </sc-if>
+            <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+              <div style="height:100%;display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;align-items:baseline;gap:8px">
+                  <span style="flex:1;font:700 13px 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:{{ unitKick }}">어느 과를 풀까요</span>
+                  <sc-if value="{{ hasUnits }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearUnits }}" style="cursor:pointer;font:700 12px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted)" style-hover="color:var(--ink)">선택 해제</span></sc-if>
+                </div>
+                <div onPointerDown="{{ unitDown }}" style="display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:6px;touch-action:none;user-select:none;animation:{{ unitAnim }}">
+                  <sc-for list="{{ units }}" as="u" hint-placeholder-count="26">
+                    <div data-n="{{ u.n }}" style="cursor:pointer;aspect-ratio:1;border-radius:12px;background:{{ u.bg }};display:flex;align-items:center;justify-content:center;font:700 15px 'Hahmlet',serif;color:{{ u.fg }};transition:background .15s">{{ u.n }}</div>
+                  </sc-for>
+                </div>
+                <div style="margin-top:auto;display:flex;align-items:center;gap:12px;padding-top:12px;border-top:2.5px dotted var(--line)">
+                  <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <span style="font:700 20px 'Hahmlet',serif;color:var(--ink)">{{ sumN }}</span>
+                    <span style="font:600 12px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">{{ sumSub }}</span>
+                  </div>
+                  <div onClick="{{ start }}" style="flex:none;white-space:nowrap;text-align:center;cursor:pointer;padding:12px 22px;border-radius:999px;background:{{ startBg }};color:{{ startFg }};font:700 15px 'Pretendard Variable',Pretendard,sans-serif;box-shadow:{{ startSh }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.04)" style-active="transform:scale(.96)">{{ startLabel }}</div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isNoteSeg }}" hint-placeholder-val="{{ false }}">
+        <div style="grid-column:1 / -1;grid-row:2;display:{{ segDisp }};flex-direction:column;gap:16px;animation:pop .2s ease-out">
+          <div style="grid-column:{{ lcCol }};grid-row:{{ lcRow }};align-self:start;padding:18px 20px;border-radius:20px;background:rgba(140,73,26,.05);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <span style="width:46px;height:46px;flex:none;border-radius:999px;background:var(--wrong-soft);color:var(--wrong-ink);display:flex;align-items:center;justify-content:center"><span class="ic" style="width:20px;height:20px"><i data-lucide="notebook-pen"></i></span></span>
+            <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px">
+              <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:20px;color:var(--ink)">{{ noteTotal }}</span>
+              <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">학습과 테스트에서 한 번에 못 맞힌 문항이 모입니다. 다른 회차에서 두 번 연속 한 번에 맞히면 빠집니다.</span>
+            </div>
+            <div onClick="{{ startNote }}" style="cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;padding:13px 22px;border-radius:999px;background:{{ noteBtnBg }};color:{{ noteBtnFg }};font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)"><span class="ic" style="width:15px;height:15px"><i data-lucide="play"></i></span>오답 노트로 테스트</div>
+          </div>
+
+          <sc-if value="{{ noteEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="grid-column:{{ rcCol }};grid-row:{{ rcRow }};align-self:start;padding:40px 24px;border-radius:26px;background:var(--tile);border:1.5px dashed var(--line);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+              <span class="ic" style="width:26px;height:26px;color:var(--sage)"><i data-lucide="circle-check-big"></i></span>
+              <span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">오답 노트가 비어 있습니다</span>
+              <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">틀린 문항이 생기면 종류별로 여기에 모입니다.</span>
+            </div>
+          </sc-if>
+
+          <div style="grid-column:{{ rcCol }};grid-row:{{ rcRow }};align-self:start;display:grid;grid-template-columns:{{ noteCols }};gap:14px;align-items:start">
+            <sc-for list="{{ noteGroups }}" as="g" hint-placeholder-count="0">
+              <div style="padding:16px 14px 14px;border-radius:20px;background:rgba(140,73,26,.05);display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="display:flex;align-items:center;gap:10px;padding:0 4px 4px">
+                  <span style="width:34px;height:34px;flex:none;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center"><span class="ic" style="width:16px;height:16px"><i data-lucide="{{ g.icon }}"></i></span></span>
+                  <span style="flex:1;font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">{{ g.label }}</span>
+                  <span style="font:700 16px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums">{{ g.count }}</span>
+                </div>
+                <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="2">
+                  <div style="padding:10px 12px;border-radius:18px;background:rgba(140,73,26,.06);display:flex;align-items:center;gap:10px;min-width:0">
+                    <span style="flex:none;padding:3px 8px;border-radius:999px;background:var(--tile-cur);border:1.5px solid var(--bd-cur);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink)">{{ r.lesson }}</span>
+                    <span style="flex:1;min-width:0;font:700 19px 'Gentium Book Plus','Gentium Greek','Hahmlet',serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.label }}</span>
+                    <span style="flex:none;padding:3px 9px;border-radius:999px;background:var(--wrong-soft);color:var(--wrong-ink);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif">{{ r.n }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+<sc-if value="{{ isFavSeg }}" hint-placeholder-val="{{ false }}">
+<div style="grid-column:1 / -1;grid-row:2;display:{{ segDisp }};flex-direction:column;gap:16px;animation:pop .2s ease-out">
+<div style="grid-column:{{ lcCol }};grid-row:{{ lcRow }};align-self:start;padding:18px 20px;border-radius:20px;background:rgba(140,73,26,.05);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+<span style="width:46px;height:46px;flex:none;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center"><span class="ic starfill" style="width:20px;height:20px"><i data-lucide="bookmark"></i></span></span>
+<div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px">
+<span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:20px;color:var(--ink)">{{ favTotal }}</span>
+<span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">학습 중에 책갈피에 담은 단어, 문법, 문장, 문법 개념이 모입니다.</span>
+</div>
+<div onClick="{{ startFav }}" style="cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;padding:13px 22px;border-radius:999px;background:{{ favBtnBg }};color:{{ favBtnFg }};font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">책갈피로 테스트<span class="ic" style="width:14px;height:14px"><i data-lucide="arrow-right"></i></span></div>
+</div>
+<sc-if value="{{ favEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="grid-column:{{ rcCol }};grid-row:{{ rcRow }};align-self:start;padding:40px 24px;border-radius:20px;background:rgba(140,73,26,.08);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+<span class="ic" style="width:26px;height:26px;color:var(--accent)"><i data-lucide="bookmark"></i></span>
+<span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">책갈피가 비어 있습니다</span>
+<span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">학습 화면에서 책갈피 끈을 내리면 여기에 모입니다.</span>
+</div>
+</sc-if>
+<div style="grid-column:{{ rcCol }};grid-row:{{ rcRow }};align-self:start;display:grid;grid-template-columns:{{ noteCols }};gap:14px;align-items:start">
+<sc-for list="{{ favGroups }}" as="g" hint-placeholder-count="0">
+<div style="padding:16px 14px 14px;border-radius:20px;background:rgba(140,73,26,.05);display:flex;flex-direction:column;gap:8px;min-width:0">
+<div style="display:flex;align-items:center;gap:10px;padding:0 4px 4px">
+<span style="width:34px;height:34px;flex:none;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center"><span class="ic" style="width:16px;height:16px"><i data-lucide="{{ g.icon }}"></i></span></span>
+<span style="flex:1;font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">{{ g.label }}</span>
+<span style="font:700 16px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);font-variant-numeric:tabular-nums">{{ g.count }}</span>
+</div>
+<sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="2">
+<div style="padding:10px 12px;border-radius:18px;background:rgba(140,73,26,.06);display:flex;align-items:center;gap:10px;min-width:0">
+<span style="flex:none;padding:3px 8px;border-radius:999px;background:var(--tile-cur);border:1.5px solid var(--bd-cur);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink)">{{ r.lesson }}</span>
+<span style="flex:1;min-width:0;font:700 {{ r.size }} 'Gentium Book Plus','Gentium Greek','Hahmlet',serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.label }}</span>
+<sc-if value="{{ r.isLink }}" hint-placeholder-val="{{ false }}"><a href="{{ r.href }}" style="flex:none;padding:4px 11px;border-radius:999px;border:1.5px solid var(--line);font:700 12px 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink)" style-hover="background:var(--accent-soft)">보기</a></sc-if>
+<span onClick="{{ r.remove }}" title="책갈피 빼기" class="ic starfill" style="width:18px;height:18px;cursor:pointer;color:var(--accent);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.12)" style-active="transform:scale(.9)"><i data-lucide="bookmark"></i></span>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+    </div>
+      </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isRun }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ runOuter }}"><div style="position:relative;{{ runBook }}">
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><nav style="position:absolute;right:-60px;top:11px;bottom:11px;z-index:3;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3"><a href="{{ t.href }}" onClick="{{ t.onClick }}" title="{{ t.label }}" style="width:47px;flex:1;min-height:110px;border-radius:0 16px 16px 0;background:{{ t.rbg }};box-shadow:{{ t.rsh }};display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none" style-hover="filter:brightness(1.05)"><span style="writing-mode:vertical-rl;white-space:nowrap;font:700 18px 'Hahmlet',serif;letter-spacing:.03em;color:{{ t.rfg }}">{{ t.label }}</span></a></sc-for>
+            </nav></sc-if>
+      <div style="{{ runScroll }}">
+      <div data-screen-label="테스트 진행" style="width:100%;max-width:{{ runMaxW }};margin:0 auto;padding:{{ runPad }};box-sizing:border-box;display:flex;flex-direction:column;gap:16px;min-height:{{ runMinH }};display:{{ runDisp }};grid-template-columns:{{ runCols }};grid-template-rows:{{ runRows }};column-gap:72px;row-gap:14px">
+      <sc-if value="{{ runDotsOn }}" hint-placeholder-val="{{ true }}"><div style="grid-column:2;grid-row:1 / -1;align-self:end;display:flex;align-items:center;gap:14px;min-width:0">
+        <div style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fill,12px);gap:4px">
+          <sc-for list="{{ runDots }}" as="d" hint-placeholder-count="20"><span style="aspect-ratio:1;border-radius:999px;background:{{ d.bg }};box-shadow:inset 0 0 0 1.5px {{ d.bd }}"></span></sc-for>
+        </div>
+        <span style="flex:none;margin-left:auto;font:700 18px 'Hahmlet',serif;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums">{{ countLabel }}</span>
+      </div></sc-if>
+      <div style="display:flex;align-items:center;gap:12px;grid-column:{{ c1 }};grid-row:{{ r1 }}">
+        <span onClick="{{ askQuit }}" title="뒤로" style="width:36px;height:36px;flex:none;cursor:pointer;border-radius:999px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);color:var(--ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);transform:scale(1.05)" style-active="transform:scale(.96)"><span class="ic" style="width:17px;height:17px"><i data-lucide="arrow-left"></i></span></span>
+        <span style="flex:1"></span>
+        <sc-if value="{{ runNarrow }}" hint-placeholder-val="{{ false }}"><span style="font:700 16px 'Pretendard Variable',Pretendard,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums">{{ countLabel }}</span></sc-if>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;grid-column:{{ c1 }};grid-row:{{ r2 }}">
+        <span title="제3과" style="font-family:'Hahmlet',serif;font-weight:700;font-size:{{ runH }};line-height:1.2;color:var(--accent-ink);white-space:nowrap;flex:none">3과</span><span style="width:2px;height:20px;flex:none;border-radius:2px;background:var(--line)"></span>
+        <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:{{ runH }};line-height:1.2;color:var(--ink)">{{ kindLabel }}</span>
+        <sc-if value="{{ fromNote }}" hint-placeholder-val="{{ false }}">
+          <span style="padding:5px 12px;border-radius:999px;background:var(--wrong-soft);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--wrong-ink)">오답 노트</span>
+        </sc-if>
+        <sc-if value="{{ isGramQ }}" hint-placeholder-val="{{ false }}">
+          <span onClick="{{ togglePeek }}" style="flex:none;margin-left:auto;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:{{ pkBg }};border:1.5px solid {{ pkBd }};font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ pkFg }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)"><span class="ic" style="width:13px;height:13px"><i data-lucide="table-2"></i></span>개념 보기</span>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ isFlash }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding-bottom:40px;grid-column:{{ cAll }};grid-row:{{ r3 }}">
+          <div style="clip-path:inset(-90px 0 -90px 0)">
+            <div onPointerDown="{{ oxDown }}" onClick="{{ oxReveal }}" style="margin:0 16px;position:relative;touch-action:none;cursor:grab;user-select:none;min-height:260px;padding:54px 22px;border-radius:34px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transform:{{ oxTf }};box-shadow:{{ oxGlow }};transition:{{ oxTrans }}">
+              
+              
+              <span class="gk" style="font-size:{{ oxF }};font-weight:700;color:var(--ink);text-align:center">{{ cur.g }}</span>
+              <sc-if value="{{ oxShow }}" hint-placeholder-val="{{ false }}">
+                <span style="padding:8px 18px;border-radius:999px;background:var(--tile);font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);animation:fadeIn .18s ease-out">{{ cur.m }}</span>
+              </sc-if>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span onClick="{{ oxNoBtn }}" style="cursor:pointer;padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--wrong-ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">← 못 외움</span>
+            <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);text-align:center">눌러서 뜻 보기 · 좌우로 밀기</span>
+            <span onClick="{{ oxYesBtn }}" style="cursor:pointer;padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--sage-ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">외움 →</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ true }}">
+        <div style="padding:{{ qPad }};{{ qCard }}display:flex;flex-direction:column;align-items:{{ qAlign }};justify-content:{{ qJC }};gap:10px;text-align:{{ qText }};animation:pop .2s ease-out;grid-column:{{ c1 }};grid-row:{{ r3 }};align-self:{{ qAS }};margin:{{ qM }}">
+          <sc-if value="{{ qHasSub }}" hint-placeholder-val="{{ false }}">
+            <span style="padding:5px 12px;border-radius:999px;background:var(--tile-done);border:1.5px solid var(--bd-done);font:700 16px 'Gentium Book Plus','Gentium Greek','Hahmlet',serif;color:var(--sage-ink)">{{ qSub }}</span>
+          </sc-if>
+          <span style="font-family:'Gentium Book Plus','Gentium Greek','Hahmlet',serif;font-size:{{ qSize }};line-height:1.45;font-weight:700;color:var(--ink);word-break:keep-all;text-wrap:pretty">{{ qMain }}</span>
+
+          <sc-if value="{{ peekOn }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:stretch;text-align:left;display:flex;flex-direction:column;gap:12px;margin-top:6px;padding-top:14px;border-top:2.5px dotted var(--line);animation:pop .2s ease-out">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="ic" style="width:15px;height:15px;color:var(--accent-ink)"><i data-lucide="table-2"></i></span>
+              <span style="flex:1;font:700 14px 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink)">개념</span>
+              <span onClick="{{ closePeek }}" title="닫기" style="width:30px;height:30px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted)" style-hover="background:rgba(140,73,26,.08);color:var(--ink)"><span class="ic" style="width:15px;height:15px"><i data-lucide="x"></i></span></span>
+            </div>
+            <div style="padding:14px 16px;border-radius:18px;background:var(--color-bg);display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">현재 능동태 직설법</span><span style="font:600 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">λύω 풀다</span><span onClick="{{ fvC1.toggle }}" title="책갈피" class="ic {{ fvC1.fill }}" style="margin-left:auto;width:20px;height:20px;cursor:pointer;color:{{ fvC1.color }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="opacity:.7;transform:scale(1.08)" style-active="transform:scale(.94)"><i data-lucide="bookmark"></i></span></div>
+              <div style="display:flex;flex-direction:column">
+                <div style="display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1fr);gap:8px;padding-bottom:8px;font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--muted)"><span></span><span>단수</span><span>복수</span></div>
+                <sc-for list="{{ cParadigm }}" as="r" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:baseline;padding:10px 0;border-top:1.5px solid var(--line)">
+                    <span style="font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ r.p }}</span>
+                    <span style="font:500 20px 'Gentium Book Plus','Gentium Greek',serif;color:var(--ink)">{{ r.sgS }}<span style="font-weight:700;color:var(--accent-ink)">{{ r.sgE }}</span></span>
+                    <span style="font:500 20px 'Gentium Book Plus','Gentium Greek',serif;color:var(--ink)">{{ r.plS }}<span style="font-weight:700;color:var(--accent-ink)">{{ r.plE }}</span></span>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="font:500 14px/1.65 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">어미에 수와 인칭이 들어 있어 주어를 따로 쓰지 않아도 알 수 있습니다. 동사에는 성별 구분이 없습니다.</span>
+            </div>
+            <div style="padding:14px 16px;border-radius:18px;background:var(--color-bg);display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">부정어 οὐ</span><span onClick="{{ fvC2.toggle }}" title="책갈피" class="ic {{ fvC2.fill }}" style="margin-left:auto;width:20px;height:20px;cursor:pointer;color:{{ fvC2.color }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="opacity:.7;transform:scale(1.08)" style-active="transform:scale(.94)"><i data-lucide="bookmark"></i></span></div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ cNegs }}" as="n" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:minmax(0,1.3fr) 56px minmax(0,1fr);gap:8px;align-items:baseline;padding:10px 0;border-top:1.5px solid var(--line)">
+                    <span style="font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">{{ n.when }}</span>
+                    <span style="font:700 20px 'Gentium Book Plus','Gentium Greek',serif;color:var(--accent-ink)">{{ n.form }}</span>
+                    <span style="font:500 19px 'Gentium Book Plus','Gentium Greek',serif;color:var(--ink)">{{ n.ex }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <span style="font:500 14px/1.65 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">부정하려는 단어 바로 앞에 놓습니다.</span>
+            </div>
+            <div style="padding:14px 16px;border-radius:18px;background:var(--color-bg);display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">동사 기초</span><span onClick="{{ fvC3.toggle }}" title="책갈피" class="ic {{ fvC3.fill }}" style="margin-left:auto;width:20px;height:20px;cursor:pointer;color:{{ fvC3.color }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="opacity:.7;transform:scale(1.08)" style-active="transform:scale(.94)"><i data-lucide="bookmark"></i></span></div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ cBasics }}" as="b" hint-placeholder-count="4">
+                  <div style="display:flex;gap:12px;padding:10px 0;border-top:1.5px solid var(--line)">
+                    <span style="width:96px;flex:none;font:700 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ b.k }}</span>
+                    <span style="flex:1;min-width:0;font:500 16px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink);word-break:keep-all">{{ b.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0;grid-column:{{ c2 }};grid-row:{{ qRRow }};align-self:{{ rRAS }};margin:{{ qRM }}">
+        <div style="display:grid;grid-template-columns:{{ chCols }};gap:10px">
+          <sc-for list="{{ choices }}" as="c" hint-placeholder-count="4">
+            <div onClick="{{ c.onClick }}" style="display:flex;align-items:center;gap:{{ chNGap }};padding:{{ chPad }};border-radius:{{ chR }};background:{{ c.bg }};border:1.5px solid {{ c.bd }};color:{{ c.fg }};opacity:{{ c.op }};cursor:{{ c.cur }};transition:background .15s,border-color .15s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)">
+              <span style="width:{{ numW }};height:{{ numW }};flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ c.nbg }};font:700 {{ numFont }};color:{{ c.nfg }}">{{ c.n }}</span>
+              <span style="flex:1;font:700 {{ chF }}/1.45 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;word-break:keep-all">{{ c.t }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:{{ slotD }};visibility:{{ slotVis }};height:44px;align-items:center;gap:12px;flex:none">
+          <span style="flex:1;min-width:0;font:700 14px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:{{ verdictFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ slotVerdict }}</span>
+          <div onClick="{{ next }}" style="display:{{ nextBtnD }};flex:none;padding:10px 24px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 15px 'Pretendard Variable',Pretendard,sans-serif;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.04)" style-active="transform:scale(.96)">다음</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:{{ sPad }};{{ sCard }}display:flex;flex-direction:column;gap:16px;animation:pop .2s ease-out;grid-column:{{ c1 }};grid-row:{{ r3 }};align-self:start">
+          <span class="gk" style="font-size:{{ sentF }};line-height:1.4;font-weight:700;color:var(--ink)">{{ cur.g }}</span>
+          <div onClick="{{ toggleTr }}" style="cursor:pointer;padding:{{ trPad }};border-radius:18px;background:{{ trBg }};border:{{ trBdW }} {{ trBdStyle }} {{ trBd }};display:flex;align-items:center;gap:10px;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)">
+            <span class="ic" style="width:16px;height:16px;color:{{ trIc }}"><i data-lucide="languages"></i></span>
+            <sc-if value="{{ trShown }}" hint-placeholder-val="{{ false }}">
+              <span style="flex:1;font:600 16px/1.55 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink);word-break:keep-all;animation:fadeIn .18s ease-out">{{ cur.ko }}</span>
+            </sc-if>
+            <sc-if value="{{ trHidden }}" hint-placeholder-val="{{ true }}">
+              <span style="flex:1;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">속으로 해석해 본 뒤 눌러서 확인하세요</span>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0;grid-column:{{ c2 }};grid-row:{{ sRRow }};align-self:start;margin-bottom:{{ rRMb }}">
+        <sc-for list="{{ sVerbs }}" as="v" hint-placeholder-count="1">
+          <div style="padding:{{ bxPad }};border-radius:26px;background:{{ bxBg }};box-shadow:{{ bxSh }};display:flex;flex-direction:column;gap:13px">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:60px">
+              <span style="font:700 20px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink)">동사 파싱</span>
+              <span class="gk" style="font-family:'Gentium Book Plus',serif;font-size:24px;font-weight:700;color:var(--ink)">{{ v.form }}</span>
+              <sc-if value="{{ v.showLemma }}" hint-placeholder-val="{{ false }}">
+                <span class="gk" style="font-size:16px;color:var(--muted)">← {{ v.lemma }}</span>
+                <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ v.mean }}</span>
+              </sc-if>
+            </div>
+            <sc-for list="{{ v.axes }}" as="a" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="width:34px;flex:none;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ a.k }}</span>
+                <div style="flex:1;display:flex;flex-wrap:wrap;gap:7px">
+                  <sc-for list="{{ a.opts }}" as="o" hint-placeholder-count="3">
+                    <span onClick="{{ o.onClick }}" style="padding:8px 14px;border-radius:999px;background:{{ o.bg }};border:1.5px solid {{ o.bd }};font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ o.fg }};opacity:{{ o.op }};cursor:{{ o.cur }};transition:background .15s,border-color .15s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">{{ o.t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+        <sc-if value="{{ sCheckable }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap">
+            <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ sHint }}</span>
+            <div onClick="{{ checkParse }}" style="padding:14px 34px;border-radius:999px;background:{{ sChkBg }};color:{{ sChkFg }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;cursor:{{ sChkCur }};transition:background .2s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">확인</div>
+          </div>
+        </sc-if>
+        <div style="display:{{ slotD }};visibility:{{ slotVis }};height:44px;align-items:center;gap:12px;flex:none">
+          <span style="flex:1;min-width:0;font:700 14px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:{{ verdictFg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ slotVerdict }}</span>
+          <div onClick="{{ next }}" style="flex:none;padding:10px 24px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 15px 'Pretendard Variable',Pretendard,sans-serif;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.04)" style-active="transform:scale(.96)">다음</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ pickedN }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px;border-radius:22px;background:{{ verdictBg }};border:1.5px solid {{ verdictBd }};animation:pop .2s ease-out">
+          <span style="flex:1;min-width:200px;font:700 14px/1.5 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ verdictC }};word-break:keep-all">{{ verdict }}</span>
+          <div onClick="{{ next }}" style="cursor:pointer;padding:13px 30px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">다음</div>
+        </div>
+      </sc-if>
+    </div>
+      </div></div></div>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="테스트 완료" style="width:100%;max-width:640px;margin:0 auto;padding:{{ runPad }};box-sizing:border-box;min-height:calc(100vh - var(--sat) - var(--sab));display:flex;flex-direction:column;gap:16px">
+      <div data-xp-anchor="1" style="display:flex;align-items:center;gap:12px;min-height:44px">
+        <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.08em;color:var(--accent-ink)">테스트</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:40px">
+      <div style="padding:{{ doneCardPad }};border-radius:30px;background:var(--tile-done);border:1.5px solid var(--bd-done);display:flex;flex-direction:column;gap:16px;animation:pop .26s ease-out">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+          <span class="ic" style="width:34px;height:34px;color:var(--sage)"><i data-lucide="party-popper"></i></span>
+          <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:24px;color:var(--ink)">테스트를 마쳤습니다</span>
+          <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ doneSub }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px">
+          <sc-for list="{{ doneStats }}" as="r" hint-placeholder-count="3">
+            <div data-xp="{{ r.xp }}" style="padding:14px 6px;border-radius:22px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;flex-direction:column;align-items:center;gap:3px">
+              <span style="font:700 19px 'Pretendard Variable',Pretendard,sans-serif;color:{{ r.fg }};font-variant-numeric:tabular-nums">{{ r.v }}</span>
+              <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ r.k }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ doneOx }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div style="padding:14px;border-radius:24px;background:var(--sage-soft);border:1.5px solid var(--bd-done);display:flex;flex-direction:column;align-items:center;gap:3px">
+              <span style="font:700 19px 'Pretendard Variable',Pretendard,sans-serif;color:var(--sage-ink)">{{ oxYesN }}</span>
+              <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">외움</span>
+            </div>
+            <div style="padding:14px;border-radius:24px;background:var(--wrong-soft);border:1.5px solid var(--wrong);display:flex;flex-direction:column;align-items:center;gap:3px">
+              <span style="font:700 19px 'Pretendard Variable',Pretendard,sans-serif;color:var(--wrong-ink)">{{ oxNoN }}</span>
+              <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">못 외움</span>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasAdded }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:16px 18px;border-radius:24px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:9px">
+              <span class="ic" style="width:16px;height:16px;color:var(--wrong-ink)"><i data-lucide="notebook-pen"></i></span>
+              <span style="flex:1;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">{{ addedTitle }}</span>
+              <span onClick="{{ openNote }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:4px;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">오답 노트 보기<span class="ic" style="width:13px;height:13px"><i data-lucide="chevron-right"></i></span></span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ added }}" as="a" hint-placeholder-count="3">
+                <span style="max-width:100%;box-sizing:border-box;padding:6px 12px;border-radius:999px;background:var(--wrong-soft);font:700 16px 'Gentium Book Plus','Gentium Greek','Hahmlet',serif;color:var(--wrong-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ a.t }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <div style="display:flex;gap:9px">
+          <div onClick="{{ backSetup }}" style="flex:1;cursor:pointer;padding:14px;text-align:center;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">테스트로</div>
+          <div onClick="{{ again }}" style="flex:1.4;cursor:pointer;padding:14px;text-align:center;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">한 번 더</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </sc-if>
+
+  </main>
+
+  <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:29;pointer-events:none;overflow:hidden"><div style="position:absolute;top:7px;left:7px;right:7px;bottom:-40px;border-radius:22px;box-shadow:0 0 0 40px #643312"></div><div style="position:absolute;top:12px;left:12px;right:12px;bottom:-40px;border:1.5px solid #d6b673;border-radius:18px"></div></div>
+    <nav style="position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:6px;padding:0 18px calc(12px + var(--sab));background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312;box-shadow:0 -1px 0 #d6b673">
+      <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3">
+        <a href="{{ t.href }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;border-radius:0 0 16px 16px;background:{{ t.tb }};color:{{ t.tf }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-active="transform:scale(.96)"><span class="ic" style="width:21px;height:21px"><i data-lucide="{{ t.icon }}"></i></span><span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif">{{ t.label }}</span></a>
+      </sc-for>
+    </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;testSize&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[10,20,30],&quot;default&quot;:20,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;테스트 문항&quot;},&quot;noteFirst&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;테스트 문항&quot;}}">
+const WORDS=[
+  {id:"w_001",g:"λόγος",m:"말씀",ch:["말씀","생명","진리","빛"]},
+  {id:"w_002",g:"ἄνθρωπος",m:"사람",ch:["사람","형제","제자","무리"]},
+  {id:"w_003",g:"θεός",m:"하나님",ch:["하나님","주","아들","영"]},
+  {id:"w_004",g:"κύριος",m:"주",ch:["주","종","길","집"]},
+  {id:"w_005",g:"ἀδελφός",m:"형제",ch:["형제","친구","이웃","일꾼"]},
+  {id:"w_006",g:"οὐρανός",m:"하늘",ch:["하늘","땅","바다","산"]}
+];
+const READY=3; // 지금 콘텐츠가 있는 과
+const MODES=[{k:"word",label:"단어",icon:"book-a"},{k:"gram",label:"문법",icon:"list-checks"},{k:"sent",label:"문장",icon:"blocks"},{k:"flash",label:"플래시 카드",icon:"layers-2"}];
+const KIND={ word:"단어", gram:"문법", sent:"문장", flash:"플래시 카드" };
+const FAV_GROUPS=[{k:"word",label:"단어",icon:"book-a"},{k:"gram",label:"문법",icon:"list-checks"},{k:"sent",label:"문장",icon:"blocks"},{k:"concept",label:"문법 개념",icon:"table-2"}];
+const GROUPS=[{k:"word",label:"단어",icon:"book-a"},{k:"gram",label:"문법",icon:"list-checks"},{k:"sent",label:"문장",icon:"blocks"}];
+const AXES=[
+  {key:"tense",k:"시제",opts:[["PRES","현재"],["IMPF","미완료과거"],["FUT","미래"],["AOR","부정과거"]]},
+  {key:"voice",k:"태",opts:[["ACT","능동"],["MID","중간"],["PASS","수동"]]},
+  {key:"mood",k:"법",opts:[["IND","직설법"],["SUBJ","가정법"],["IMPV","명령법"]]},
+  {key:"person",k:"인칭",opts:[["1p","1인칭"],["2p","2인칭"],["3p","3인칭"]]},
+  {key:"num",k:"수",opts:[["S","단수"],["P","복수"]]}
+];
+const PARADIGM=[["1인칭","ω","ομεν"],["2인칭","εις","ετε"],["3인칭","ει","ουσι(ν)"]].map(([p,s,pl])=>({ p, sgS:"λύ", sgE:s, plS:"λύ", plE:pl }));
+const NEGS=[{ when:"자음 앞", form:"οὐ", ex:"οὐ φωνή" },{ when:"약기식 모음 앞", form:"οὐκ", ex:"οὐκ ἐστίν" },{ when:"강기식 모음 앞", form:"οὐχ", ex:"οὐχ ἁμαρτία" }];
+const BASICS=[{ k:"두 유형", v:"ω 동사 · μι 동사" },{ k:"주요 여섯 부분", v:"현재 · 미래 · 부정과거 · 완료 · 완료수동 · 부정과거수동" },{ k:"태", v:"능동태 · 중간태 · 수동태" },{ k:"파싱", v:"기본형과 뜻, 그리고 시제 · 태 · 법 · 수 · 인칭" }];
+const NAV=[{k:"learn",label:"학습",icon:"house",href:"Start.dc.html"},{k:"test",label:"테스트",icon:"clipboard-check",href:"Review.dc.html"},{k:"me",label:"마이페이지",icon:"user-round",href:"Start.dc.html#me"}];
+const shuffle=a=>{ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+const load=(k,d)=>{ try { return JSON.parse(localStorage.getItem(k)||"null")??d; } catch(e){ return d; } };
+const save=(k,v)=>{ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+const noteKind=t=>t==="flash"?"word":t;
+const mmss=t=>Math.floor(t/60)+":"+String(t%60).padStart(2,"0");
+
+class Component extends DCLogic {
+  state = { screen:"setup", seg:"test", sel:[], units:[], favOnly:false, w:1080, gram:[], sent:[], note:{}, favs:[],
+    q:[], total:0, again:0, pick:null, wrongs:[], flash:null, failed:false, parse:{}, checked:false, trShown:false,
+    oxDX:0, oxDrag:false, oxShow:false, oxYesN:0, oxNoN:0, start:0, time:0, shake:false, added:[], noteRun:false, leave:false };
+  rootRef = React.createRef();
+
+  async componentDidMount(){
+    this.readNote(); this.setState({ favs:load("gk_favs",[]), seg: location.hash==="#note"?"note":location.hash==="#fav"?"fav":"test" });
+    // 폭: 창(iframe) 너비로 판단 — 700px 미만이면 폰 레이아웃
+    this.onResize=()=>{ const w=window.innerWidth; if (w!==this.state.w) this.setState({ w }); };
+    window.addEventListener("resize", this.onResize); this.onResize();
+    this.onKey=e=>this.key(e); window.addEventListener("keydown", this.onKey);
+    this.onFocus=()=>this.readNote(); window.addEventListener("focus", this.onFocus);
+    try { const [g,s]=await Promise.all([fetch("grammar_l03.json").then(r=>r.json()), fetch("sentences_l03.json").then(r=>r.json())]); this.setState({ gram:g, sent:s }); } catch(e){}
+    this.icons();
+  }
+  componentDidUpdate(){ this.icons(); const ph=this.state.screen; if (ph==="done" && this._ph!=="done") this.launchXp(); this._ph=ph; }
+  componentWillUnmount(){ window.removeEventListener("resize", this.onResize); if (this.ro) this.ro.disconnect(); window.removeEventListener("keydown", this.onKey); window.removeEventListener("focus", this.onFocus); }
+  icons(){ if (window.lucide && this.rootRef.current) window.lucide.createIcons({ root:this.rootRef.current }); }
+  readNote(){ this.setState({ note: window.gkNote ? window.gkNote.read() : load("gk_wrong",{}) }); }
+
+  // 종류: 플래시 카드는 단독, 단어·문법·문장은 여러 개
+  toggleMode(k){ this.setState(s=>{
+    if (k==="flash") return { sel: s.sel.includes("flash")?[]:["flash"] };
+    const base=s.sel.filter(x=>x!=="flash");
+    return { sel: base.includes(k)?base.filter(x=>x!==k):[...base,k] }; }); }
+
+  // 과 선택: 누른 과부터 끌어간 과까지 범위로 칠하기
+  unitDown(e){ const t=e.target.closest&&e.target.closest("[data-n]"); if (!t) return;
+    const n=+t.getAttribute("data-n"), on=!this.state.units.includes(n), base=[...this.state.units];
+    const paint=m=>{ const a=Math.min(n,m), b=Math.max(n,m), span=[]; for(let i=a;i<=b;i++) span.push(i);
+      const next=on?Array.from(new Set([...base,...span])):base.filter(x=>!span.includes(x)); this.setState({ units:next.sort((x,y)=>x-y), shake:false }); };
+    paint(n);
+    const move=ev=>{ const el=document.elementFromPoint(ev.clientX,ev.clientY), c=el&&el.closest&&el.closest("[data-n]"); if (c) paint(+c.getAttribute("data-n")); };
+    const up=()=>{ window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up); };
+    window.addEventListener("pointermove",move); window.addEventListener("pointerup",up); }
+
+  find(t,id){ const st=this.state; return t==="word"?WORDS.find(w=>w.id===id):t==="gram"?st.gram.find(g=>g.id===id):st.sent.find(s=>s.id===id); }
+  keyOf(it){ return noteKind(it.t)+":"+it.d.id; }
+  labelOf(t,d){ return t==="gram"?d.p:d.g; }
+  pool(){ const st=this.state, items=[];
+    if (!st.units.includes(READY)) return items;
+    const fav=x=>!st.favOnly||st.favs.includes(x);
+    if (st.sel.includes("word")) WORDS.filter(w=>fav(w.id)).forEach(d=>items.push({ t:"word", d }));
+    if (st.sel.includes("flash")) WORDS.filter(w=>fav(w.id)).forEach(d=>items.push({ t:"flash", d }));
+    if (st.sel.includes("gram")) st.gram.filter(g=>fav("gram:"+g.id)).forEach(d=>items.push({ t:"gram", d }));
+    if (st.sel.includes("sent")) st.sent.filter(s=>fav("sent:"+s.id)).forEach(d=>items.push({ t:"sent", d }));
+    return items; }
+  // 문항 구성: 고른 종류·과에서 오답 노트 문항을 먼저, 나머지는 무작위로 채워 최대 N문항
+  plan(){ const st=this.state, limit=+(this.props.testSize??20), noteFirst=this.props.noteFirst??true, pool=this.pool();
+    const inNote=it=>!!st.note[this.keyOf(it)];
+    if (!noteFirst) { const items=shuffle(pool).slice(0,limit); return { items, nNote:items.filter(inNote).length }; }
+    const a=shuffle(pool.filter(inNote)).slice(0,limit), b=shuffle(pool.filter(it=>!inNote(it))).slice(0,limit-a.length);
+    return { items:[...a,...b], nNote:a.length }; }
+  noteItems(){ return shuffle(Object.keys(this.state.note).map(k=>{ const [t0,id]=k.split(":"), t=window.gkNote?window.gkNote.kindOf(k):t0, d=this.find(t,id); return d?{ t, d }:null; }).filter(Boolean)); }
+
+  begin(q, noteRun){ if (!q.length) return;
+    this.sess=window.gkNote?window.gkNote.session():null;
+    this.setState({ screen:"run", peek:false, q, total:q.length, again:0, oxYesN:0, oxNoN:0, added:[], noteRun, start:Date.now() }, ()=>this.loadItem()); }
+  start(){ const st=this.state;
+    if (!st.units.length && st.sel.length) { this.setState({ shake:true }); setTimeout(()=>this.setState({ shake:false }),500); return; }
+    this.begin(this.plan().items.map(x=>({ ...x, note:!!st.note[this.keyOf(x)] })), false); }
+  startNote(){ this.begin(this.noteItems().map(x=>({ ...x, note:true })), true); }
+  loadItem(){ const it=this.state.q[0];
+    if (!it) { this.setState({ screen:"done", time:Math.max(1,Math.round((Date.now()-this.state.start)/1000)) }); return; }
+    let opts=[];
+    if (it.t==="word") opts=shuffle(it.d.ch);
+    if (it.t==="gram") opts=shuffle(it.d.o);
+    this.setState({ opts, pick:null, wrongs:[], flash:null, failed:false, parse:{}, checked:false, trShown:false, oxDX:0, oxShow:false }); }
+  answerOf(it){ return it.t==="word"?it.d.m:it.d.o[it.d.a-1]; }
+  markWrong(it){ if (this.sess) this.sess.wrong(noteKind(it.t), it.d.id, READY);
+    const lbl=this.labelOf(it.t,it.d);
+    this.setState(s=>({ added: s.added.includes(lbl)?s.added:[...s.added,lbl] })); this.readNote(); }
+  markRight(it){ if (this.sess) this.sess.right(noteKind(it.t), it.d.id); this.readNote();
+    // 오늘의 목표: 테스트에서 한 번에 맞힌 문항도 셈
+    try { const d=new Date(), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"), m={ word:"단어", flash:"단어", gram:"문법", sent:"문장" }[it.t]; if (m) { const g=JSON.parse(localStorage.getItem("gk_goal_daily")||"{}"), day=g[k]||{}; day[m]=(day[m]||0)+1; localStorage.setItem("gk_goal_daily", JSON.stringify({ [k]:day })); } } catch(e){} }
+  pick(t){ const st=this.state, it=st.q[0]; if (st.pick!==null || st.wrongs.includes(t)) return;
+    if (t===this.answerOf(it)) { if (!st.failed) this.markRight(it); this.setState({ pick:t }); if (it.t==="word") setTimeout(()=>{ const s2=this.state; if (s2.pick===t && s2.q[0]===it) this.advance(s2.failed); },650); return; }
+    if (!st.failed) this.markWrong(it);
+    this.setState({ wrongs:[...st.wrongs,t], flash:t, failed:true }); setTimeout(()=>this.setState(x=>x.flash===t?{ flash:null }:{}),500); }
+  setAxis(vi,key,val){ if (this.state.checked) return; this.setState(s=>({ parse:{ ...s.parse, [vi]:{ ...(s.parse[vi]||{}), [key]:val } } })); }
+  parseReady(it){ return it.d.verbs.every((v,vi)=>AXES.every(ax=>(this.state.parse[vi]||{})[ax.key])); }
+  checkParse(){ const st=this.state, it=st.q[0]; if (!it||it.t!=="sent"||st.checked||!this.parseReady(it)) return;
+    const ok=it.d.verbs.every((v,vi)=>AXES.every(ax=>(st.parse[vi]||{})[ax.key]===v[ax.key]));
+    if (ok) this.markRight(it); else this.markWrong(it);
+    this.setState({ checked:true, failed:!ok, trShown:true }); }
+  advance(failed){ const q=[...this.state.q], cur=q.shift();
+    if (failed) q.push({ ...cur, retry:true });
+    this.setState(s=>({ q, again: failed?s.again+1:s.again }), ()=>this.loadItem()); }
+  oxDecide(yes){ const it=this.state.q[0]; if (!it) return; if (yes) this.markRight(it); else this.markWrong(it);
+    this.setState(s=>({ oxOut: yes?1:-1, oxDrag:false, [yes?"oxYesN":"oxNoN"]:s[yes?"oxYesN":"oxNoN"]+1 }));
+    setTimeout(()=>{ this.setState({ oxOut:0, oxDX:0, oxSnap:true }); this.advance(!yes); setTimeout(()=>this.setState({ oxSnap:false }),30); }, 300); }
+  oxDown(e){ const x0=e.clientX; let moved=false;
+    const move=ev=>{ const dx=ev.clientX-x0; if (Math.abs(dx)>5) moved=true; this.setState({ oxDX:dx, oxDrag:true }); };
+    const up=()=>{ window.removeEventListener("pointermove",move); window.removeEventListener("pointerup",up);
+      const dx=this.state.oxDX; if (moved) this.noClick=Date.now();
+      if (Math.abs(dx)>90) this.oxDecide(dx>0); else this.setState({ oxDX:0, oxDrag:false }); };
+    window.addEventListener("pointermove",move); window.addEventListener("pointerup",up); }
+  cfav(k){ const on=!!(window.gkFav&&window.gkFav.has(k)); return { fill:on?"starfill":"", color:on?"var(--accent)":"var(--muted)", toggle:()=>{ if (window.gkFav) window.gkFav.toggle(k); this.setState({ favs:load("gk_favs",[]) }); } }; }
+  key(e){ const st=this.state; if (st.screen!=="run"||st.leave) return; if (st.peek && e.key==="Escape") { this.setState({ peek:false }); return; } const it=st.q[0]; if (!it) return;
+    if (it.t==="flash") { if (e.key==="ArrowRight") this.oxDecide(true); if (e.key==="ArrowLeft") this.oxDecide(false); if (e.key===" ") { e.preventDefault(); this.setState(x=>({ oxShow:!x.oxShow })); } return; }
+    if (it.t==="sent") { if (e.key==="Enter") { if (st.checked) this.advance(st.failed); else this.checkParse(); } return; }
+    if (/^[1-4]$/.test(e.key) && st.opts[+e.key-1]) this.pick(st.opts[+e.key-1]);
+    if (e.key==="Enter" && st.pick!==null) this.advance(st.failed); }
+  pct(){ const st=this.state; return st.total?Math.round(Math.max(0,st.total-st.again)/st.total*100):100; }
+  reward(){ return 10+this.state.total+(this.pct()>=90?10:0); }
+  launchXp(){ const reward=this.reward(); let old=0; try { old=+(localStorage.getItem("gk_xp_total")||0); } catch(e){}
+    const nu=old+reward; try { localStorage.setItem("gk_xp_total", String(nu));
+      const d=new Date(), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+      const daily=load("gk_xp_daily",{}); daily[k]=(daily[k]||0)+reward; save("gk_xp_daily",daily);
+      const ss=load("gk_sessions",[]), st=this.state;
+      ss.unshift({ items:st.total, mode:"테스트", at:Date.now(), reward, acc:this.pct()+"%", time:mmss(st.time) });
+      save("gk_sessions", ss.slice(0,50)); } catch(e){}
+    setTimeout(()=>{ const root=this.rootRef.current, from=root&&root.querySelector('[data-xp="src"]'); if (from&&window.gkXp) window.gkXp.run(from, reward, old, nu); }, 550); }
+
+  renderVals(){
+    const st=this.state, narrow=st.w<700, setup=st.screen==="setup", it=st.q[0]||{ t:"word", d:WORDS[0] }, t=it.t;
+    const plan=this.plan(), n=plan.items.length, noteKeys=Object.keys(st.note);
+    const canStart=st.sel.length>0&&st.units.length>0&&n>0;
+    let startLabel="테스트 시작";
+    if (!st.sel.length) startLabel="종류를 고르세요"; else if (!st.units.length) startLabel="과를 고르세요"; else if (!n) startLabel="선택한 과에 아직 문항이 없습니다";
+    const limit=+(this.props.testSize??20);
+    const sumSub=!st.sel.length||!st.units.length ? "종류와 과를 고르면 문항 수가 정해집니다"
+      : !n ? "고른 과에 아직 문항이 없습니다"
+      : (plan.nNote?"오답 노트 "+plan.nNote+" + 새 문항 "+(n-plan.nNote):"모두 새 문항")+" · 최대 "+limit+"문항";
+    const dx=st.oxDX, a=Math.min(1,Math.abs(dx)/110), glowC=dx>0?"var(--sage)":"var(--wrong)";
+    const picked=t==="sent"?st.checked:st.pick!==null;
+    const sentOk=t==="sent"&&st.checked&&!st.failed;
+    const verdict=t==="sent"
+      ? (st.failed?"초록색이 정답입니다 · 끝에 다시 나오고 오답 노트에 담았습니다":"파싱이 맞았어요")
+      : (st.failed?"끝에 다시 나옵니다 · 오답 노트에 담았습니다":"정답이에요");
+    const modeNames=st.noteRun?"오답 노트":st.sel.map(k=>KIND[k]).join(" · ");
+    const groups=GROUPS.map(g=>{ const rows=noteKeys.filter(k=>(window.gkNote?window.gkNote.kindOf(k):k.split(":")[0])===g.k).map(k=>{ const e=st.note[k], id=k.split(":")[1], d=this.find(g.k,id);
+        return { lesson:"제"+(e.lesson||READY)+"과", label:d?this.labelOf(g.k,d):id, n:e.n+"회 틀림", nn:e.n }; }).sort((x,y)=>y.nn-x.nn);
+      return { ...g, rows, count:String(rows.length) }; }).filter(g=>g.rows.length);
+    const CONCEPTS={ "g03-verb":"현재 능동태 직설법", "g03-neg":"부정어 οὐ", "g03-basic":"동사 기초" };
+    const favSplit=x=>{ const s=String(x), i=s.indexOf(":"); return i<0?["word",s]:[s.slice(0,i),s.slice(i+1)]; };
+    const favGroups=FAV_GROUPS.map(g=>{ const rows=(st.favs||[]).map(favSplit).filter(([t0])=>t0===g.k).map(([t0,id])=>{ const d=t0==="concept"?null:this.find(t0,id), label=t0==="concept"?(CONCEPTS[id]||null):(d?this.labelOf(t0,d):null);
+        if (!label) return null;
+        return { lesson:"제"+READY+"과", label, size:t0==="gram"||t0==="concept"?"16px":"19px", isLink:t0==="concept", href:"Grammar Study.dc.html#concept",
+          remove:()=>{ if (window.gkFav) window.gkFav.toggle(t0==="word"?id:t0+":"+id); this.setState({ favs:load("gk_favs",[]) }); } }; }).filter(Boolean);
+      return { ...g, rows, count:String(rows.length) }; }).filter(g=>g.rows.length);
+    const favN=favGroups.reduce((a,g)=>a+g.rows.length,0);
+    const ready=t==="sent"&&this.parseReady(it);
+    return {
+      rootRef:this.rootRef, narrow,
+      isSetup:setup, isRun:st.screen==="run", runOuter: narrow?"":"min-height:calc(100vh - var(--sat) - var(--sab));display:flex;align-items:center;justify-content:center;padding:24px 84px 24px 24px;box-sizing:border-box", runBook: narrow?"":"position:fixed;left:calc((100vw - min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6))) / 2 - 30px);top:calc((100vh - min(750px, calc(100vh - 110px))) / 2);margin:0;box-sizing:border-box;width:min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6));height:min(750px, calc(100vh - 110px));border-radius:24px;border:13px solid transparent;background:linear-gradient(90deg,#f1e4ca 0%,#fbf3e3 6%,#fffaf1 30%,#f7edda 46%,#eadbbd 50%,#f7edda 54%,#fffaf1 70%,#fbf3e3 94%,#f1e4ca 100%) padding-box,url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E') border-box,#643312 border-box;outline:1.5px solid #d6b673;outline-offset:-7px;box-shadow:0 2px 3px rgba(30,14,4,.2),0 30px 54px -28px rgba(30,14,4,.42)", runScroll: narrow?"":"height:100%;overflow-y:auto;scrollbar-width:none;padding:12px 18px;box-sizing:border-box", runMinH: narrow?"100vh":"100%", runMaxW: narrow?"720px":"none", runDisp: narrow?"flex":"grid", runCols: narrow?"none":"minmax(0,1fr) minmax(0,1fr)", runRows: narrow?"none":"auto auto minmax(0,1fr)", c1: narrow?"auto":"1", c2: narrow?"auto":"2", cAll: narrow?"auto":"1 / -1", r1: narrow?"auto":"1", r2: narrow?"auto":"2", r3: narrow?"auto":"3", rR: narrow?"auto":"1 / -1", rRAS: narrow?"auto":"center", rRMb: narrow?"0":"52px", pickedN: picked&&narrow, pickedW: picked&&!narrow, slotD: narrow?"none":"flex", slotVis: picked&&!narrow?"visible":"hidden", verdictFg: st.failed?"var(--wrong-ink)":"var(--sage-ink)", runCard: narrow?"position:relative;border-radius:22px;background:#fffdf8;border:1px solid #e8dcc6;box-shadow:0 1px 2px rgba(46,43,37,.05),0 12px 28px -18px rgba(46,43,37,.28);":"position:relative;border-radius:20px;background:rgba(140,73,26,.05);", isDone:st.screen==="done",
+      showSide:false, wide:!narrow, showTabs:setup&&narrow,
+      nav:NAV.map(x=>{ const on=x.k==="test"; return { ...x, onClick:(e)=>{ const s=this.state; if (s.screen==="run" && s.total-s.q.length>0) { e.preventDefault(); this.setState({ leave:true, leaveTo:x.href }); } }, bg:on?"var(--accent-soft)":"transparent", bd:on?"var(--bd-cur)":"transparent", fg:on?"var(--accent-ink)":"var(--muted)", tc:on?"var(--accent)":"var(--muted)", tb:on?"#fffaf1":"transparent", tf:on?"var(--accent-ink)":"#d6b673", rbg:on?"url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312":"#ead9bb", rfg:on?"#d6b673":"var(--muted)", rsh:on?"2px 3px 6px rgba(30,14,4,.3)":"inset 6px 0 8px -6px rgba(30,14,4,.35),1px 2px 4px rgba(30,14,4,.18)" }; }),
+      pad: narrow?"28px 22px 112px":"24px 80px 24px 24px", rvMax: narrow?"1040px":"none", rvAI: narrow?"stretch":"center", rvMinH: narrow?"0":"calc(100vh - var(--sat) - var(--sab))", runPad: narrow?(narrow?"16px 20px 32px":"32px 28px 48px"):"4px 4px 8px", h1: narrow?"26px":"32px",
+      cols: narrow?"minmax(0,1fr)":"minmax(0,1fr) minmax(0,1fr)", colGap: narrow?"16px":"68px",
+      noteCols: narrow?"minmax(0,1fr)":"minmax(0,1fr)",
+      segAlign: narrow?"stretch":"flex-start",
+      segs:[{ k:"test", label:"테스트", icon:"clipboard-check" },{ k:"note", label:"오답 노트", icon:"notebook-pen", n:String(noteKeys.length), nbg:"var(--wrong-soft)", nfg:"var(--wrong-ink)" },{ k:"fav", label:"책갈피", icon:"bookmark", n:String(favN), nbg:"var(--accent-soft)", nfg:"var(--accent-ink)" }].map(s=>{ const on=st.seg===s.k;
+        return { ...s, hasN:!!s.n&&s.n!=="0", tabH: on?"40px":"34px", tabBg: on?"url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312":"#efe2c7", tabFg: on?"#d6b673":"var(--muted)", bg:on?"var(--card)":"transparent", bd:on?"var(--bd-cur)":"transparent", fg:on?"var(--accent-ink)":"var(--muted)",
+          onClick:()=>{ this.readNote(); this.setState({ seg:s.k, favs:load("gk_favs",[]) }); } }; }),
+      isTestSeg: st.seg==="test", rvCols: narrow?"minmax(0,1fr)":"minmax(0,1fr) minmax(0,1fr)", modePad: narrow?"13px 6px":"9px 6px", rvRows: narrow?"none":"auto minmax(0,1fr)", unitPad: narrow?"9px 0":"6px 0", sumPad: narrow?"18px 20px":"12px 16px", sumGap: narrow?"14px":"10px", startPad: narrow?"15px":"12px", modeWs: narrow?"normal":"nowrap", modeR: narrow?"18px":"999px", modeDir: narrow?"column":"row", helpD: narrow?"block":"none", boxPad: narrow?"18px 19px":"14px 16px", tgDisp: narrow?"grid":"contents", segDisp: narrow?"flex":"contents", lcCol: narrow?"auto":"1", lcRow: narrow?"auto":"2", rcCol: narrow?"auto":"2", rcRow: narrow?"auto":"2", tabInset: narrow?"10px":"0", tabPadX: narrow?"13px":"9px", bookPad: narrow?"16px 12px":"24px 30px", rvBook: narrow?"border-radius:22px;background:rgba(140,73,26,.05);":"position:fixed;left:calc((100vw - min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6))) / 2 - 30px);top:calc((100vh - min(750px, calc(100vh - 110px))) / 2);margin:0;box-sizing:border-box;width:min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6));height:min(750px, calc(100vh - 110px));border-radius:24px;border:13px solid transparent;background:linear-gradient(90deg,#f1e4ca 0%,#fbf3e3 6%,#fffaf1 30%,#f7edda 46%,#eadbbd 50%,#f7edda 54%,#fffaf1 70%,#fbf3e3 94%,#f1e4ca 100%) padding-box,url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E') border-box,#643312 border-box;outline:1.5px solid #d6b673;outline-offset:-7px;box-shadow:0 2px 3px rgba(30,14,4,.2),0 30px 54px -28px rgba(30,14,4,.42);", isNoteSeg: st.seg==="note", isFavSeg: st.seg==="fav",
+      favTotal: favN+"개", favEmpty: !favN, favGroups, favBtnBg: favN?"var(--btn)":"var(--line)", favBtnFg: favN?"var(--on-accent)":"var(--muted)",
+      startFav: ()=>{ if (favN) this.setState({ seg:"test", favOnly:true }); },
+      modeCols: narrow?"repeat(2,minmax(0,1fr))":narrow?"repeat(auto-fit,minmax(72px,1fr))":"repeat(2,minmax(0,1fr))",
+      modes: MODES.map(m=>{ const on=st.sel.includes(m.k);
+        return { ...m, desc:{"word":"뜻 고르기","gram":"알맞은 답","sent":"해석·파싱","flash":"넘기며 외우기"}[m.k]||"", wbg:on?"var(--accent-soft)":"rgba(140,73,26,.06)", rbg:on?"var(--btn)":"transparent", rbd:on?"var(--btn)":"rgba(140,73,26,.32)", chk:on?"✓":"", bg:on?"var(--accent-soft)":"var(--tile)", bd:on?"var(--bd-cur)":"var(--line)", fg:on?"var(--accent-ink)":"var(--muted)", onClick:()=>this.toggleMode(m.k) }; }),
+      toggleFav: ()=>this.setState(s=>({ favOnly:!s.favOnly })),
+      favBg: st.favOnly?"var(--accent-soft)":"var(--card)", favBd: st.favOnly?"var(--bd-cur)":"var(--line)", favFg: st.favOnly?"var(--accent-ink)":"var(--muted)",
+      favCount: String(st.favs.filter(k=>String(k).indexOf("concept:")!==0).length),
+      unitDown: e=>this.unitDown(e),
+      units: Array.from({ length:26 },(_,i)=>{ const u=i+1, on=st.units.includes(u);
+        return { n:String(u), bg:on?"var(--accent)":"rgba(140,73,26,.06)", bd:on?"var(--accent)":"transparent", fg:on?"var(--on-accent)":u===READY?"var(--ink)":"var(--muted)" }; }),
+      hasUnits: st.units.length>0, clearUnits: ()=>this.setState({ units:[] }),
+      unitBd: st.shake?"var(--accent)":"var(--line)", unitAnim: st.shake?"nudge .35s ease":"none", unitLblC: st.shake?"var(--accent-ink)":"var(--muted)", unitKick: st.shake?"var(--wrong-ink)":"var(--accent-ink)", swBg: st.favOnly?"var(--btn)":"var(--line)", swJ: st.favOnly?"flex-end":"flex-start", colAS: narrow?"start":"stretch",
+      sumN: n+"문항", sumSub,
+      start: ()=>this.start(), startLabel,
+      startBg: canStart?"var(--btn)":"var(--line)", startFg: canStart?"var(--on-accent)":"var(--muted)", startSh: canStart?"0 6px 14px -6px var(--glow)":"none",
+      noteTotal: noteKeys.length+"문항", noteEmpty: !noteKeys.length, noteGroups: groups,
+      startNote: ()=>this.startNote(),
+      noteBtnBg: noteKeys.length?"var(--btn)":"var(--line)", noteBtnFg: noteKeys.length?"var(--on-accent)":"var(--muted)",
+      leaveOpen: st.leave, stay: ()=>this.setState({ leave:false }), stopProp: e=>e.stopPropagation(),
+      askQuit: ()=>{ if (st.total-st.q.length>0) this.setState({ leave:true, leaveTo:null }); else this.setState({ screen:"setup" }); },
+      quitNow: ()=>{ const to=this.state.leaveTo; if (to) { location.href=to; return; } this.setState({ leave:false, screen:"setup" }); this.readNote(); },
+      prog: Math.round((st.total-st.q.length)/Math.max(1,st.total)*100)+"%",
+      runWide: !narrow, runNarrow: narrow,
+      countLabel: Math.min(st.total, st.total-st.q.length+1)+" / "+st.total,
+      kindLabel: KIND[t], fromNote: !!it.note, runH: narrow?"20px":"24px", doneCardPad: narrow?"28px 20px":"34px 30px",
+      isFlash: st.screen==="run"&&t==="flash", isQuiz: st.screen==="run"&&(t==="word"||t==="gram"), isSent: st.screen==="run"&&t==="sent",
+      cur: it.d, oxF: narrow?"36px":"48px", oxShow: st.oxShow,
+      oxReveal: ()=>{ if (Date.now()-(this.noClick||0)<250) return; this.setState(x=>({ oxShow:!x.oxShow })); },
+      oxDown: e=>this.oxDown(e),
+      oxTf: "translateX("+(st.oxOut?st.oxOut*900:dx)+"px) rotate("+((st.oxOut?st.oxOut*900:dx)/26)+"deg)",
+      oxTrans: st.oxDrag||st.oxSnap?"none":"transform .3s cubic-bezier(.4,0,.6,1), box-shadow .2s",
+      oxGlow: a? "0 0 "+Math.round(18+a*40)+"px "+Math.round(a*10)+"px color-mix(in oklab, "+glowC+" "+Math.round(a*65)+"%, transparent)" : "0 18px 36px -26px rgba(32,30,29,.5)",
+      oxYes: dx>36?"1":"0", oxNo: dx<-36?"1":"0",
+      oxYesBtn: ()=>this.oxDecide(true), oxNoBtn: ()=>this.oxDecide(false),
+      qPad: narrow?"24px 20px":"32px 30px", qAlign: t==="gram"?"flex-start":"center", qText: t==="gram"?"left":"center",
+      qSize: t==="word"?(narrow?"38px":"48px"):(narrow?"19px":"21px"),
+      qMain: t==="gram"?it.d.p:it.d.g, qHasSub: false, chNGap: narrow?"12px":"16px", chPad: narrow?"15px 16px":"9px 20px", chR: narrow?"22px":"20px", numW: narrow?"28px":"auto", numFont: narrow?"14px 'Pretendard Variable',Pretendard,sans-serif":"20px 'Hahmlet',serif", chF: t==="word"?(narrow?"18px":"17px"):"16px",
+      runDotsOn: !narrow&&t!=="flash", runDots: Array.from({ length:st.total },(_,i)=>{ const done=st.total-st.q.length; return i<done?{ bg:"var(--sage)", bd:"var(--sage)" }:i===done?{ bg:"transparent", bd:"var(--accent)" }:{ bg:"transparent", bd:"var(--line)" }; }), nextBtnD: t==="word"?"none":"block", slotVerdict: st.failed?"끝에 다시 나와요":"정답이에요", qSub: it.d.t,
+      chCols: narrow&&t!=="gram"?"1fr 1fr":"minmax(0,1fr)", chAlign: t==="gram"?"left":"center",
+      choices: (st.opts||[]).map((c,pos)=>{ const ok=st.pick===c, flash=st.flash===c, dead=st.wrongs.includes(c)&&!flash;
+        const W=!narrow; return { t:c, n:String(pos+1), nbg: W?"transparent":ok?"var(--sage)":flash?"var(--wrong)":"var(--accent-soft)", nfg: W?(ok?"var(--sage-ink)":flash?"var(--wrong-ink)":"var(--accent-ink)"):(ok||flash?"var(--on-accent)":"var(--accent-ink)"), bg:ok?"var(--tile-done)":flash?"var(--wrong-soft)":W?"rgba(140,73,26,.06)":"var(--tile)", bd:ok?"var(--bd-done)":flash?"var(--wrong)":W?"transparent":"var(--line)",
+          fg:ok?"var(--sage-ink)":flash?"var(--wrong-ink)":dead?"var(--muted)":"var(--ink)", op:dead?"0.45":"1", cur:dead||st.pick!==null?"default":"pointer", onClick:()=>this.pick(c) }; }),
+      sentF: narrow?"24px":"30px", subPad: narrow?"18px 18px":"22px 24px",
+      trShown: st.trShown, trHidden: !st.trShown,
+      toggleTr: ()=>this.setState(x=>({ trShown:!x.trShown })),
+      trBg: !narrow?"transparent":st.trShown?"var(--tile-done)":"var(--tile)", trPad: narrow?"13px 16px":"4px 0", trBdW: narrow?"1.5px":"0",
+      bxPad: !narrow?"0":"18px 18px", bxBg: !narrow?"transparent":"var(--card)", bxSh: !narrow?"none":"0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22)", trBd: st.trShown?"var(--bd-done)":"var(--line)", trBdStyle: st.trShown?"solid":"dashed", trIc: st.trShown?"var(--sage-ink)":"var(--muted)",
+      sVerbs: t==="sent"&&it.d.verbs ? it.d.verbs.map((v,vi)=>({ form:v.form, lemma:v.lemma, mean:v.mean, showLemma:st.checked,
+        axes: AXES.map(ax=>({ k:ax.k, opts: ax.opts.map(([val,lab])=>{ const sel=(st.parse[vi]||{})[ax.key]===val, right=v[ax.key]===val;
+          let bg=narrow?"var(--tile)":"rgba(140,73,26,.06)", bd=narrow?"var(--line)":"transparent", fg="var(--ink)", op="1";
+          if (st.checked) { if (right) { bg="var(--tile-done)"; bd="var(--bd-done)"; fg="var(--sage-ink)"; } else if (sel) { bg="var(--wrong-soft)"; bd="var(--wrong)"; fg="var(--wrong-ink)"; } else { fg="var(--muted)"; op="0.5"; } }
+          else if (sel) { bg="var(--accent-soft)"; bd="var(--bd-cur)"; fg="var(--accent-ink)"; }
+          return { t:lab, bg, bd, fg, op, cur:st.checked?"default":"pointer", onClick:()=>this.setAxis(vi,ax.key,val) }; }) })) })) : [],
+      sCheckable: t==="sent"&&!st.checked,
+      sHint: ready?"":"항목마다 하나씩 고르세요",
+      sChkBg: ready?"var(--btn)":"var(--line)", sChkFg: ready?"var(--on-accent)":"var(--muted)", sChkCur: ready?"pointer":"default",
+      checkParse: ()=>this.checkParse(),
+      picked, verdict,
+      verdictC: st.failed?"var(--wrong-ink)":"var(--sage-ink)", verdictBg: st.failed?"var(--wrong-soft)":"var(--tile-done)", verdictBd: st.failed?"var(--wrong)":"var(--bd-done)",
+      sentOk,
+      next: ()=>this.advance(st.failed),
+      isGramQ: st.screen==="run"&&t==="gram", peekOn: t==="gram"&&!!st.peek,
+      togglePeek: ()=>this.setState(x=>({ peek:!x.peek })), closePeek: ()=>this.setState({ peek:false }),
+      pkBg: st.peek?"var(--accent-soft)":"transparent", pkBd: st.peek?"var(--bd-cur)":"var(--line)", pkFg: st.peek?"var(--accent-ink)":"var(--muted)",
+      cParadigm: PARADIGM, cNegs: NEGS, cBasics: BASICS,
+      fvC1: this.cfav("concept:g03-verb"), fvC2: this.cfav("concept:g03-neg"), fvC3: this.cfav("concept:g03-basic"),
+      // 단어: 단어 학습처럼 상자 없이 왼쪽 쪽 가운데, 보기는 오른쪽 쪽 같은 줄 가운데
+      qCard: !narrow ? "position:relative;" : (narrow?"position:relative;border-radius:22px;background:#fffdf8;border:1px solid #e8dcc6;box-shadow:0 1px 2px rgba(46,43,37,.05),0 12px 28px -18px rgba(46,43,37,.28);":"position:relative;border-radius:20px;background:rgba(140,73,26,.05);"),
+      qAS: t==="word"&&!narrow ? "stretch" : "start", qM: t==="word"&&!narrow ? "12px 0 102px" : "0", qJC: t==="word" ? "center" : "flex-start",
+      qRRow: t==="word"&&!narrow ? "3" : (narrow?"auto":"1 / -1"), qRM: narrow ? "0" : (t==="word" ? "12px 0 52px" : "0 0 52px"),
+      // 문장: 헬라어 문장은 상자 없이 책 위에, 파싱 칸과 같은 높이에서 시작
+      sPad: narrow ? (narrow?"24px 20px":"32px 30px") : "0", sCard: narrow ? "position:relative;border-radius:22px;background:#fffdf8;border:1px solid #e8dcc6;box-shadow:0 1px 2px rgba(46,43,37,.05),0 12px 28px -18px rgba(46,43,37,.28);" : "position:relative;",
+      sRRow: narrow ? "auto" : "3",
+      doneSub: (modeNames||"테스트")+" · "+st.total+"문항",
+      doneStats: [
+        { k:"한 번에 맞힘", v:this.pct()+"%", fg:this.pct()>=90?"var(--sage-ink)":"var(--ink)" },
+        { k:"소요 시간", v:mmss(st.time), fg:"var(--ink)" },
+        { xp:"src", k:"획득 보상", v:"+"+this.reward(), fg:"var(--accent-ink)" }
+      ],
+      doneOx: st.oxYesN+st.oxNoN>0, oxYesN:String(st.oxYesN), oxNoN:String(st.oxNoN),
+      hasAdded: st.added.length>0, addedTitle: "오답 노트에 담은 문항 "+st.added.length,
+      added: st.added.map(x=>({ t:x })),
+      openNote: ()=>{ this.readNote(); this.setState({ screen:"setup", seg:"note" }); },
+      backSetup: ()=>{ this.readNote(); this.setState({ screen:"setup" }); },
+      again: ()=>{ this.readNote(); setTimeout(()=>{ if (st.noteRun) this.startNote(); else this.start(); },0); }
+    };
+  }
+}
+</script>
+</body>
+</html>

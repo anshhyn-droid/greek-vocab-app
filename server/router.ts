@@ -2,7 +2,7 @@
 import { HttpError, json } from './http.js';
 import { consent, consentCancel, googleCallback, googleStart, logout, me } from './routes/auth.js';
 import { clearLesson, home, setGoals } from './routes/home.js';
-import { abandonRun, finishRun, listBookmarks, saveRun, startRun, toggleBookmark } from './routes/runs.js';
+import { abandonRun, finishRun, listBookmarks, listNotes, saveRun, startRun, toggleBookmark } from './routes/runs.js';
 
 type Handler = (req: Request) => Promise<Response>;
 
@@ -19,6 +19,7 @@ const ROUTES: Record<string, Handler> = {
   'POST /api/runs': startRun,
   'GET /api/bookmarks': listBookmarks,
   'POST /api/bookmarks': toggleBookmark,
+  'GET /api/notes': listNotes,
 };
 
 export async function route(req: Request): Promise<Response> {

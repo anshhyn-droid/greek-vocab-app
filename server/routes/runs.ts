@@ -239,3 +239,12 @@ export async function toggleBookmark(req: Request) {
   else await db.run('INSERT INTO bookmarks (user_id, item_type, item_id, lesson_id) VALUES (?, ?, ?, ?)', user.id, b.type, b.id, lesson);
   return json({ type: b.type, id: b.id, on: !on });
 }
+
+// ── 오답 노트 목록 (테스트 탭) ──
+export async function listNotes(req: Request) {
+  const { user } = await requireUser(req);
+  const rows = await (await getDb()).all<{ item_type: string; item_id: string; lesson_id: number; wrong_count: number; ok_streak: number }>(
+    'SELECT item_type, item_id, lesson_id, wrong_count, ok_streak FROM wrong_notes WHERE user_id = ? ORDER BY wrong_count DESC, last_wrong_at DESC', user.id,
+  );
+  return json(rows.map((r) => ({ type: r.item_type, id: r.item_id, lesson: r.lesson_id, wrong: r.wrong_count, ok: r.ok_streak })));
+}

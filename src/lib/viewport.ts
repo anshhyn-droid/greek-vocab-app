@@ -19,16 +19,17 @@ export function bookSize(w: number, h: number): BookSize {
   return { w, h, narrow: w < PHONE_MAX, BH, BW, left: (w - BW) / 2 - 30, top: (h - BH) / 2 };
 }
 
+// 창 크기는 리스너 하나가 계산하고, 이 값을 쓰는 화면 모두에게 알림
 let snap = bookSize(window.innerWidth, window.innerHeight);
+const subs = new Set<() => void>();
+window.addEventListener('resize', () => {
+  if (window.innerWidth === snap.w && window.innerHeight === snap.h) return;
+  snap = bookSize(window.innerWidth, window.innerHeight);
+  subs.forEach((cb) => cb());
+});
 const subscribe = (cb: () => void) => {
-  const on = () => {
-    if (window.innerWidth !== snap.w || window.innerHeight !== snap.h) {
-      snap = bookSize(window.innerWidth, window.innerHeight);
-      cb();
-    }
-  };
-  window.addEventListener('resize', on);
-  return () => window.removeEventListener('resize', on);
+  subs.add(cb);
+  return () => { subs.delete(cb); };
 };
 
 // 창 크기가 바뀌면 다시 계산
