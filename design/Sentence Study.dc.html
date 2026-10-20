@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>:root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}</style>
+<link rel="stylesheet" href="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/styles.css">
+<script src="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Gentium+Book+Plus:wght@400;700&family=Hahmlet:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="greek-font.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="xp-fly.js"></script>
+<script src="gk-notes.js"></script>
+<script src="gk-session.js"></script>
+<style>
+html,body{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}body{margin:0;background:var(--color-bg);font-family:"Gentium Greek","Pretendard Variable",Pretendard,sans-serif}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}
+.ic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ic svg{width:100%;height:100%;display:block;stroke-width:2.75}
+.starfill svg{fill:currentColor}
+.ss{--ground:#f5ead8;--card:#fffaf1;--tile:#fffdf8;--ink:#201e1d;--muted:oklch(.455 .018 45);--line:#e8dcc6;--accent:#c67139;--accent-soft:#ffe1d0;--accent-ink:#8c491a;--tile-cur:#ffe8d6;--bd-cur:#eeb98d;--btn:#a85c2b;--btn-hover:#8a4720;--btn-plate:#cf8550;--on-accent:oklch(.975 .006 85);--sage:#7a8a5e;--sage-soft:#e1eecc;--sage-ink:#56633f;--tile-done:#e7efd6;--bd-done:#c3d2a4;--wrong:#c0453a;--wrong-soft:#fbe4e0;--wrong-ink:#9b2f27;--glow:rgba(112,58,20,.13)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" class="ss" data-screen-label="문장 학습" style="min-height:100vh;padding-top:var(--sat);padding-bottom:var(--sab);box-sizing:border-box;background:var(--ground);color:var(--ink)">
+
+  <sc-if value="{{ leaveOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ stayHere }}" style="position:fixed;inset:0;z-index:50;background:rgba(32,30,29,.42);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div onClick="{{ stopProp }}" style="width:100%;max-width:380px;padding:26px 24px 20px;border-radius:30px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);box-shadow:0 24px 50px -24px rgba(32,30,29,.55);display:flex;flex-direction:column;gap:12px;animation:pop .2s ease-out">
+        <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:20px;color:var(--ink)">학습을 그만할까요?</span>
+        <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">지금까지 푼 곳은 저장돼서 이어서 할 수 있어요.<br><b style="color:var(--wrong-ink)">경험치와 학습 기록은 끝까지 마쳐야 남습니다.</b></span>
+        <div style="display:flex;gap:9px;margin-top:6px">
+          <div onClick="{{ stayHere }}" style="flex:1.3;cursor:pointer;padding:13px;text-align:center;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">계속 풀기</div>
+          <div onClick="{{ goMenu }}" style="flex:1;cursor:pointer;padding:13px;text-align:center;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">나가기</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+
+  <div style="{{ stOuter }}"><div style="position:relative;{{ stBook }}">
+    <sc-if value="{{ stIsBook }}" hint-placeholder-val="{{ true }}"><nav style="position:absolute;right:-60px;top:11px;bottom:11px;z-index:3;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3"><a href="{{ t.href }}" onClick="{{ t.onClick }}" title="{{ t.label }}" style="width:47px;flex:1;min-height:110px;border-radius:0 16px 16px 0;background:{{ t.rbg }};box-shadow:{{ t.rsh }};display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none" style-hover="filter:brightness(1.05)"><span style="writing-mode:vertical-rl;white-space:nowrap;font:700 18px 'Hahmlet',serif;letter-spacing:.03em;color:{{ t.rfg }}">{{ t.label }}</span></a></sc-for>
+            </nav></sc-if>
+    <sc-if value="{{ stIsBook }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;top:0;bottom:0;left:50%;width:64px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(46,43,37,0),rgba(46,43,37,.06) 42%,rgba(46,43,37,.12) 50%,rgba(46,43,37,.06) 58%,rgba(46,43,37,0));pointer-events:none;z-index:0"></div></sc-if>
+    <div style="position:relative;z-index:1;box-sizing:border-box;height:{{ stInH }};overflow-y:{{ stInOv }};scrollbar-width:none;padding:{{ stInPad }};display:{{ inDisp }};grid-template-columns:{{ stCols }};grid-template-rows:{{ inRows }};column-gap:72px;row-gap:12px;align-content:stretch">
+  <div data-xp-anchor="1" style="max-width:{{ hdMaxW }};margin:{{ hdM }};padding:{{ hdP }};grid-column:{{ hdCol }};grid-row:{{ hdRow }};min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span onClick="{{ askLeave }}" title="뒤로" style="width:36px;height:36px;flex:none;cursor:pointer;border-radius:999px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);color:var(--ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);transform:scale(1.05)" style-active="transform:scale(.96)"><span class="ic" style="width:17px;height:17px"><i data-lucide="arrow-left"></i></span></span>
+      <span title="제3과" style="font-family:'Hahmlet',serif;font-weight:700;font-size:{{ h1 }};line-height:1.2;color:var(--accent-ink);white-space:nowrap;flex:none">3과</span><span style="width:2px;height:20px;flex:none;border-radius:2px;background:var(--line)"></span>
+      <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:{{ h1 }};line-height:1.2;color:var(--ink)">문장</span>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto;font:700 16px 'Pretendard Variable',Pretendard,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums">{{ countLabel }}</span></sc-if>
+      <span style="flex:1 0 100%;order:9;min-width:0;padding-left:46px;box-sizing:border-box;font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">해석과 동사 파싱을 모두 맞히면 다음 문장으로 넘어갑니다</span>
+    </div>
+  </div>
+  
+  <div style="max-width:{{ maxW }};margin:0 auto;padding:20px {{ padX }} 40px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;display:{{ stDisp }};grid-template-columns:{{ stCols }};grid-template-rows:{{ stRows }};gap:{{ stGap }}">
+    <div style="flex:1 1 520px;min-width:0;display:{{ mainD }};flex-direction:column;gap:16px">
+
+      <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:44px 26px;border-radius:26px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+          <span class="ic" style="width:30px;height:30px;color:var(--wrong)"><i data-lucide="cloud-off"></i></span>
+          <span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">문제를 불러오지 못했습니다</span>
+          <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">인터넷 연결을 확인한 뒤 다시 시도해 주세요.</span>
+          <div style="display:flex;gap:9px;margin-top:8px;flex-wrap:wrap;justify-content:center">
+            <div onClick="{{ retryLoad }}" style="cursor:pointer;padding:12px 24px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">다시 시도</div>
+            <div onClick="{{ goMenu }}" style="cursor:pointer;padding:12px 24px;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">과 메뉴로</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:60px 24px;border-radius:26px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);text-align:center;font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">문장을 불러오는 중입니다</div>
+      </sc-if>
+
+      <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:0;grid-column:{{ sLCol }};grid-row:{{ sLRow }}">
+      <div style="padding:{{ cardPad }};position:relative;border-radius:22px;border:9px solid transparent;background:linear-gradient(90deg,#eadbbd 0%,#f7edda 4%,#fffaf1 12%,#fffaf1 100%) padding-box,url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E') border-box,#643312 border-box;outline:1.5px solid #d6b673;outline-offset:-5px;box-shadow:0 2px 3px rgba(30,14,4,.18),0 22px 40px -22px rgba(30,14,4,.42);display:flex;flex-direction:column;gap:12px;animation:pop .2s ease-out;border:{{ qcBd }};background:{{ qcBg }};outline:{{ qcOl }};box-shadow:{{ qcSh }};position:{{ qcPos }}"><div onClick="{{ fvS.toggle }}" title="책갈피" style="position:absolute;top:-9px;right:-2px;padding:0 40px 24px;cursor:pointer;z-index:2"><div style="width:20px;height:{{ fvS.ribH }};background:{{ fvS.ribBg }};clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 15px),0 100%);filter:drop-shadow(0 2px 2px rgba(30,14,4,.2));transition:height .45s cubic-bezier(.34,1.56,.64,1),background .25s"></div></div><span style="position:absolute;top:12px;right:76px;font:600 12px 'Pretendard Variable',Pretendard,sans-serif;color:var(--muted);white-space:nowrap;pointer-events:none">{{ fvS.hint }}</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="padding:5px 12px;border-radius:999px;border:1.5px solid var(--line);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);white-space:nowrap">{{ sentLabel }}</span>
+            <sc-if value="{{ isRetry }}" hint-placeholder-val="{{ false }}">
+              <span style="padding:5px 12px;border-radius:999px;background:var(--wrong-soft);font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--wrong-ink)">다시 풀기</span>
+            </sc-if>
+          </div>
+          <span class="gk" style="font-family:'Gentium Book Plus',serif;font-size:{{ gkBig }};line-height:1.4;font-weight:700;color:var(--ink)">{{ s.g }}</span>
+        </div>
+      <div style="padding:{{ bxPad }};border-radius:26px;background:{{ bxBg }};box-shadow:{{ bxSh }};display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="flex:1;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ trHead }}">해석</span>
+            <sc-if value="{{ trOk }}" hint-placeholder-val="{{ false }}"><span class="ic" style="width:16px;height:16px;color:var(--sage)"><i data-lucide="check"></i></span></sc-if>
+          </div>
+          <div ref="{{ lineRef }}" style="min-height:58px;padding:12px 14px;border-radius:22px;transition:background .15s,border-color .15s;background:{{ lineBg }};border:1.5px dashed {{ lineBd }};display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <sc-for list="{{ koSlots }}" as="b" hint-placeholder-count="3">
+              <span data-slot="1" onClick="{{ b.onClick }}" onPointerDown="{{ b.onDown }}" style="touch-action:none;user-select:none;margin-left:{{ b.ml }};padding:9px 14px;border-radius:16px;background:{{ b.bg }};border:1.5px solid {{ b.bd }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ b.fg }};cursor:{{ b.cur }};transition:margin-left .15s ease,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)">{{ b.t }}</span>
+            </sc-for>
+            <sc-if value="{{ koEmpty }}" hint-placeholder-val="{{ false }}">
+              <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">낱말을 누르거나 끌어다 넣으세요 · 순서는 상관없어요</span>
+            </sc-if>
+          </div>
+          <sc-if value="{{ koMsg }}" hint-placeholder-val="{{ false }}">
+            <span style="font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--wrong-ink)">{{ koMsg }}</span>
+          </sc-if>
+          <sc-if value="{{ koOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ koPool }}" as="b" hint-placeholder-count="7">
+                <span onClick="{{ b.onClick }}" onPointerDown="{{ b.onDown }}" style="touch-action:none;user-select:none;padding:9px 14px;border-radius:16px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ b.fg }};text-decoration:{{ b.deco }};opacity:{{ b.op }};cursor:{{ b.cur }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="border-color:var(--color-neutral-500);transform:scale(1.02)" style-active="transform:scale(.96)">{{ b.t }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center">
+              <span onClick="{{ koClear }}" style="cursor:pointer;padding:9px 16px;border-radius:999px;border:1.5px solid var(--line);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">지우기</span>
+              <span style="flex:1"></span>
+            </div>
+          </sc-if>
+        </div>
+      
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0;min-height:0;overflow-y:{{ sROv }};scrollbar-width:none;grid-column:{{ sRCol }};grid-row:{{ sRRow }};margin:{{ sRMt }}">
+      <sc-for list="{{ verbs }}" as="v" hint-placeholder-count="1">
+          <div style="padding:{{ bxPad }};border-radius:26px;background:{{ bxBg }};box-shadow:{{ bxSh }};display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:60px">
+              <span style="font:700 20px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ v.head }}">동사 파싱</span>
+              <span class="gk" style="font-family:'Gentium Book Plus',serif;font-size:24px;font-weight:700;color:var(--ink)">{{ v.form }}</span>
+              <sc-if value="{{ v.lemShow }}" hint-placeholder-val="{{ false }}">
+                <span class="gk" style="font-family:'Gentium Book Plus',serif;font-size:19px;color:var(--muted)">← {{ v.lemma }}</span>
+                <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ v.mean }}</span>
+              </sc-if>
+            </div>
+            <sc-for list="{{ v.axes }}" as="a" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <span style="width:{{ axW }};flex:none;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:{{ a.kfg }}">{{ a.k }}</span>
+                <div style="flex:1;display:flex;flex-wrap:wrap;gap:7px">
+                  <sc-for list="{{ a.opts }}" as="o" hint-placeholder-count="3">
+                    <span onClick="{{ o.onClick }}" class="{{ o.cls }}" style="padding:8px 15px;border-radius:999px;background:{{ o.bg }};border:1.5px solid {{ o.bd }};font-weight:700;font-size:{{ o.fs }};font-family:{{ o.ff }};color:{{ o.fg }};opacity:{{ o.op }};cursor:{{ o.cur }};transition:background .15s,border-color .15s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">{{ o.t }}</span>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ v.done }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:12px 16px;border-radius:18px;background:var(--tile-done);border:1.5px solid var(--bd-done);font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink);animation:pop .2s ease-out"><b style="color:var(--sage-ink)">해석</b> · {{ v.gloss }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+      <sc-if value="{{ checkOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="position:{{ ckPos }};bottom:0;z-index:2;padding:{{ ckPad }};background:{{ ckBg }};display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap">
+            <sc-if value="{{ checkHint }}" hint-placeholder-val="{{ true }}">
+              <span style="font:600 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ checkHint }}</span>
+            </sc-if>
+            <div onClick="{{ koCheck }}" style="padding:14px 34px;border-radius:999px;background:{{ checkBg }};color:{{ checkFg }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;cursor:{{ checkCur }};transition:background .2s,transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.05)" style-active="transform:scale(.96)">확인</div>
+          </div>
+        </sc-if>
+          <sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:14px 18px;border-radius:20px;background:rgba(140,73,26,.06);display:flex;gap:9px;align-items:flex-start">
+              <span class="ic" style="width:15px;height:15px;margin-top:3px;color:var(--accent)"><i data-lucide="info"></i></span>
+              <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">{{ s.note }}</span>
+            </div>
+          </sc-if>
+          <div style="display:flex;justify-content:flex-end">
+            <div onClick="{{ next }}" style="padding:14px 30px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;cursor:pointer;animation:pop .2s ease-out;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">{{ nextCta }}</div>
+          </div>
+        </sc-if>
+    </div>
+      </sc-if>
+
+      <sc-if value="{{ isEnd }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:34px 30px;border-radius:30px;background:var(--tile-done);border:1.5px solid var(--bd-done);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;animation:pop .26s ease-out">
+          <span class="ic" style="width:34px;height:34px;color:var(--sage)"><i data-lucide="party-popper"></i></span>
+          <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:24px;color:var(--ink)">문장을 모두 풀었어요</span>
+          <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">해석과 동사 파싱을 모두 마쳤습니다 · {{ coinLabel }}</span>
+          <div style="margin-top:10px;width:100%;max-width:520px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <sc-for list="{{ stats }}" as="r" hint-placeholder-count="3">
+              <div data-xp="{{ r.xp }}" style="padding:14px 6px;border-radius:22px;background:var(--card);box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;flex-direction:column;align-items:center;gap:3px">
+                <span style="font:700 19px 'Pretendard Variable',Pretendard,sans-serif;color:{{ r.fg }};font-variant-numeric:tabular-nums">{{ r.v }}</span>
+                <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ r.k }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:9px;flex-wrap:wrap;justify-content:center">
+            <div onClick="{{ restart }}" style="cursor:pointer;padding:12px 20px;border-radius:999px;border:1.5px solid var(--bd-cur);background:var(--card);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--accent-ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--accent-soft);transform:scale(1.05)" style-active="transform:scale(.96)">다시 하기</div>
+            <div onClick="{{ goNext }}" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:12px 22px;border-radius:999px;background:var(--btn);color:var(--on-accent);font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--btn-hover);transform:scale(1.05)" style-active="transform:scale(.96)">과 메뉴로<span class="ic" style="width:14px;height:14px"><i data-lucide="arrow-right"></i></span></div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:0 1 300px;min-width:260px;display:flex;flex-direction:column;gap:14px;grid-column:{{ sSCol }};grid-row:{{ sSRow }};align-self:{{ sSAS }}">
+      <div style="padding:{{ sbPad }};border-radius:20px;background:{{ qSideBg }};box-shadow:{{ qSideSh }};display:flex;flex-direction:{{ sbDir }};align-items:{{ sbAI }};gap:{{ sbGap }}">
+        <div style="display:{{ sLblD }};align-items:baseline;justify-content:space-between;gap:8px"><span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.08em;color:var(--muted)">문장 진행</span><span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;letter-spacing:.08em;color:var(--muted);font-variant-numeric:tabular-nums">{{ countLabel }}</span></div>
+        <div style="flex:1;min-width:0;display:grid;grid-template-columns:{{ dotCols }};gap:{{ dotGap }}">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="9">
+            <span style="width:{{ dotSz }};height:{{ dotSz }};flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ r.bg }};box-shadow:inset 0 0 0 {{ dotBw }} {{ r.bd }};font:700 {{ dotF }} 'Pretendard Variable',Pretendard,sans-serif;color:{{ r.fg }}">{{ r.n }}</span>
+          </sc-for>
+        </div>
+        <sc-if value="{{ wideV }}" hint-placeholder-val="{{ true }}"><span style="flex:none;margin-left:auto;font:700 18px 'Hahmlet',serif;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums">{{ countLabel }}</span></sc-if>
+        <div style="display:{{ sLblD }};gap:14px;flex-wrap:wrap;font:600 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;background:var(--sage)"></span>한 번에</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;background:var(--wrong)"></span>다시 풀기</span>
+          <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:999px;box-shadow:inset 0 0 0 2px var(--accent)"></span>지금</span>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+    </div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const NAV_TABS=[{k:"learn",label:"학습",icon:"house",href:"Start.dc.html"},{k:"test",label:"테스트",icon:"clipboard-check",href:"Review.dc.html"},{k:"me",label:"마이페이지",icon:"user-round",href:"Start.dc.html#me"}];
+const shuffle=a=>{ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+const AXES=[
+  {key:"tense",k:"시제",opts:[["PRES","현재"],["IMPF","미완료과거"],["FUT","미래"],["AOR","부정과거"]]},
+  {key:"voice",k:"태",opts:[["ACT","능동"],["MID","중간"],["PASS","수동"]]},
+  {key:"mood",k:"법",opts:[["IND","직설법"],["SUBJ","가정법"],["IMPV","명령법"]]},
+  {key:"num",k:"수",opts:[["S","단수"],["P","복수"]]},
+  {key:"person",k:"인칭",opts:[["1p","1인칭"],["2p","2인칭"],["3p","3인칭"]]}
+];
+
+// 오늘의 목표: 완전히 통과한 문항마다 1씩 더함 (실제: daily_goal_progress)
+const goalTick=m=>{ try { const d=new Date(), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  const g=JSON.parse(localStorage.getItem("gk_goal_daily")||"{}"), day=g[k]||{}; day[m]=(day[m]||0)+1; localStorage.setItem("gk_goal_daily", JSON.stringify({ [k]:day })); } catch(e){} };
+// 이어서 하기: 문항이 바뀔 때마다 진도를 저장, 끝내거나 다시 풀면 지움. 7일 지나면 버림 (실제: 서버 study_progress)
+const RKEY="gk_resume_l03_sent";
+const rGet=()=>{ try { const r=JSON.parse(localStorage.getItem(RKEY)||"null"); return r&&Date.now()-r.savedAt<7*864e5?r:null; } catch(e){ return null; } };
+const rSet=o=>{ try { localStorage.setItem(RKEY, JSON.stringify({ ...o, savedAt:Date.now() })); } catch(e){} };
+const rClear=()=>{ try { localStorage.removeItem(RKEY); } catch(e){} };
+
+class Component extends DCLogic {
+  state = { data:[], q:[], phase:"loading", tr:[], trWrong:[], trOk:false, pw:[], failed:false,
+    retry:[], okFirst:[], cl:[], done:0, start:0, time:0 };
+  rootRef = React.createRef();
+  lineRef = React.createRef();
+  // 낱말 블록 끌어 놓기: 보기 → 해석 칸에 놓으면 넣기, 해석 칸 → 밖에 놓으면 빼기. 6px 미만 움직임은 클릭으로 처리
+  inLine(x,y){ const l=this.lineRef.current; if (!l) return false; const r=l.getBoundingClientRect(); return x>=r.left-8&&x<=r.right+8&&y>=r.top-8&&y<=r.bottom+8; }
+  dragStart(e, from, act, can){
+    if (!can || e.button>0) return;
+    const el=e.currentTarget, r=el.getBoundingClientRect();
+    const d={ x0:e.clientX, y0:e.clientY, moved:false, ghost:null, op0:el.style.opacity };
+    const move=ev=>{ const dx=ev.clientX-d.x0, dy=ev.clientY-d.y0;
+      if (!d.moved) { if (Math.hypot(dx,dy)<6) return; d.moved=true;
+        const g=el.cloneNode(true);
+        Object.assign(g.style,{ position:'fixed', left:r.left+'px', top:r.top+'px', width:r.width+'px', height:r.height+'px', boxSizing:'border-box', margin:0, zIndex:90, pointerEvents:'none', opacity:'1', transition:'none', boxShadow:'0 14px 28px -12px rgba(32,30,29,.5)' });
+        document.body.appendChild(g); d.ghost=g; el.style.opacity='0.3'; }
+      d.ghost.style.transform='translate('+dx+'px,'+dy+'px) scale(1.06) rotate(-2deg)';
+      const over=this.inLine(ev.clientX,ev.clientY), idx=over?this.slotIndex(ev.clientX,ev.clientY):null;
+      if (over!==!!this.state.dragOver || idx!==this.state.dropIdx) this.setState({ dragOver:over, dropIdx:idx }); };
+    const up=ev=>{ window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up);
+      if (!d.moved) return;
+      d.ghost.remove(); el.style.opacity=d.op0; this.noClick=Date.now();
+      const over=this.inLine(ev.clientX,ev.clientY), idx=this.state.dropIdx; this.setState({ dragOver:false, dropIdx:null });
+      act(over, idx); };
+    window.addEventListener('pointermove',move); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+  }
+  clickOk(){ return Date.now()-(this.noClick||0)>300; }
+
+  // 화면 폭 700px 미만이면 폰 레이아웃
+  watchWidth(){ if (this.onResize) return;
+    this.onResize=()=>{ const narrow=window.innerWidth<700; if (narrow!==this.state.narrow) this.setState({ narrow }); };
+    window.addEventListener("resize", this.onResize); this.onResize(); }
+  componentWillUnmount(){ window.removeEventListener("resize", this.onResize); }
+  async componentDidMount(){
+    let xp0=0; try { xp0=+(localStorage.getItem("gk_xp_total")||0); } catch(e){} this.setState({ xpTotal:xp0, xpShown:xp0 });
+    this.watchWidth();
+    await this.fetchData();
+    this.icons();
+  }
+  // 이전 단계를 직접 기억해 '끝'으로 바뀌는 순간 한 번만 모션 실행
+  componentDidUpdate(){ this.icons(); const ph=this.state.phase;
+    if (ph==="end" && this._ph!=="end") this.launchXp(); this._ph=ph; }
+  launchXp(){
+    const reward=this.renderVals().reward||0, old=this.state.xpTotal||0, nu=old+reward;
+    try { localStorage.setItem("gk_xp_total", String(nu)); } catch(e){}
+    // 마이페이지용 기록: 날짜별 경험치, 최근 학습 (서버 연결 후 daily_activity · study_sessions로 대체)
+    try { const d=new Date(), k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+      const daily=JSON.parse(localStorage.getItem("gk_xp_daily")||"{}"); daily[k]=(daily[k]||0)+reward; localStorage.setItem("gk_xp_daily", JSON.stringify(daily));
+      const sv=this.renderVals().stats||[], ss=JSON.parse(localStorage.getItem("gk_sessions")||"[]");
+      ss.unshift({ items:(this.state.data||[]).length, mode:"문장", at:Date.now(), reward, acc:(sv[0]||{}).v, time:(sv[1]||{}).v }); localStorage.setItem("gk_sessions", JSON.stringify(ss.slice(0,50))); } catch(e){}
+    this.setState({ xpTotal:nu });
+    // 오른쪽 위에 총 경험치가 나타나고 "+N XP"가 날아가 합산됨 (xp-fly.js)
+    setTimeout(()=>{ const root=this.rootRef.current, from=root&&root.querySelector('[data-xp="src"]');
+      if (from && window.gkXp) window.gkXp.run(from, reward, old, nu); }, 550);
+  }
+  icons(){ if (window.lucide && this.rootRef.current) window.lucide.createIcons({ root:this.rootRef.current }); }
+
+  async fetchData(){
+    this.setState({ phase:"loading" });
+    try { const r=await fetch("sentences_l03.json"); if (!r.ok) throw new Error(r.status);
+      const data=await r.json(); if (!data.length) throw new Error("empty");
+      const saved=rGet();
+      this.setState({ data }, ()=>{ if (saved && saved.n===data.length && Array.isArray(saved.q) && saved.q.length && saved.q.every(i=>data[i])) this.resume(saved); else this.restart(); }); }
+    catch(e){ this.setState({ phase:"error" }); }
+  }
+  resume(r){ this.sess=window.gkNote&&window.gkNote.session("s03");
+    this.setState({ q:r.q, retry:r.retry, okFirst:r.okFirst, cl:r.cl, done:r.done, start:Date.now()-(r.elapsed||0), time:0 }, ()=>this.load()); }
+  restart(){ rClear();
+    this.sess=window.gkNote&&window.gkNote.session("s03",true);
+    this.setState({ q:shuffle([...Array(this.state.data.length).keys()]), retry:[], okFirst:[], cl:[], done:0, start:Date.now(), time:0 }, ()=>this.load());
+  }
+  load(){
+    const st=this.state, s=st.data[st.q[0]];
+    if (st.cl.length) rSet({ n:st.data.length, q:st.q, retry:st.retry, okFirst:st.okFirst, cl:st.cl, done:st.done, elapsed:Date.now()-st.start, at:st.done+" / "+st.data.length });
+    // 해석 블록: 정답 낱말 + 함정 낱말(인칭·격 조사·시제를 바꾼 것)
+    // 엑셀 오답_블록 열에 값이 있으면 그것을, 없으면 자동 규칙으로 만든 함정을 씀
+    // 동사 함정은 5개 중 무작위 3개 (시제·법·태·문형을 바꾼 형태)
+    const traps=(s.koTrapsManual&&s.koTrapsManual.length)?s.koTrapsManual
+      :[...s.koTraps, ...shuffle(s.koVerbTraps||[]).slice(0,3)];
+    const pool=shuffle([...s.koTokens.map(t=>({t,ans:1})), ...traps.map(t=>({t,ans:0}))]);
+    this.setState({ phase:"quiz", koPool:pool, koAsm:[], koBad:[], koMsg:null, trOk:false,
+      pw:s.verbs.map(()=>({})), failed:false,
+      // 원형 보기: 같은 동사의 현재 능동 직설법 변화형 중에서 고름
+      // 정답 = 기본형(1인칭 단수), 오답 = 문장 속 형태(기본형과 다를 때) + 다른 인칭·수 형태
+      lemOpts: s.verbs.map(v=>{
+        const stem=v.lemma.slice(0,-1);
+        const forms=["ω","εις","ει","ομεν","ετε","ουσι"].map(e=>stem+e).filter(f=>f!==v.lemma);
+        const inSent=v.form.toLowerCase();
+        const pick=forms.includes(inSent) ? [inSent, ...shuffle(forms.filter(f=>f!==inSent)).slice(0,2)] : shuffle(forms).slice(0,3);
+        return shuffle([v.lemma, ...pick]); }) });
+  }
+  koTap(pi, at){ const st=this.state; if (st.trOk||st.koBad.includes(pi)||st.koAsm.includes(pi)) return;
+    const a=[...st.koAsm]; a.splice(at==null?a.length:at, 0, pi); this.setState({ koAsm:a, koMsg:null }); }
+  koMove(pos, at){ const st=this.state; if (st.trOk) return;
+    const a=[...st.koAsm], [pi]=a.splice(pos,1); a.splice(at>pos?at-1:at, 0, pi); this.setState({ koAsm:a, koMsg:null }); }
+  // 놓을 위치: 해석 칸 안 블록들 중 포인터가 가운데보다 왼쪽인 첫 블록 앞
+  slotIndex(x,y){ const l=this.lineRef.current; if (!l) return null;
+    const els=[...l.querySelectorAll('[data-slot]')];
+    for (let i=0;i<els.length;i++){ const r=els[i].getBoundingClientRect();
+      if (y<r.top) return i; if (y<=r.bottom && x<r.left+r.width/2) return i; }
+    return els.length; }
+  koUntap(pos){ const st=this.state; if (st.trOk) return;
+    this.setState({ koAsm:st.koAsm.filter((_,i)=>i!==pos), koMsg:null }); }
+  koCheck(){
+    const st=this.state, s=st.data[st.q[0]];
+    // 해석 블록이 1개 이상 있고 모든 동사 파싱을 마쳤을 때만 확인 가능. 블록 개수는 상관없음
+    if ((!st.trOk && !st.koAsm.length) || !s.verbs.every((_,i)=>this.axisReady(i))) return;
+    let wrongAny=false;
+    // 파싱 판정: 맞으면 잠금(초록), 틀리면 그 보기를 오답으로 표시하고 다시 고르게 함
+    const pw=s.verbs.map((v,vi)=>{ const p={ ...(st.pw[vi]||{}) };
+      this.axesFor(vi).forEach(a=>{ const w=p[a.key]||{wrong:[],ok:false,sel:null};
+        if (w.ok) return;
+        if (w.sel===v[a.key]) p[a.key]={ ...w, ok:true };
+        else { wrongAny=true; p[a.key]={ ...w, wrong:[...w.wrong,w.sel], sel:null, fresh:true }; } });
+      return p; });
+    const upd={ pw };
+    if (!st.trOk) {
+      const bad=st.koAsm.filter(pi=>!st.koPool[pi].ans), keep=st.koAsm.filter(pi=>st.koPool[pi].ans);
+      const missing=s.koTokens.length-keep.length;
+      if (!bad.length && !missing) { upd.trOk=true; upd.koMsg=null; }
+      else { wrongAny=true;
+        // 틀린 블록은 빼고 잠금. 맞게 넣은 블록은 그대로 둠
+        const msg=[bad.length?"맞지 않는 낱말 "+bad.length+"개를 뺐습니다":"", missing?"낱말 "+missing+"개가 더 필요합니다":""].filter(Boolean).join(" · ");
+        Object.assign(upd,{ koAsm:keep, koBad:[...st.koBad,...bad], koMsg:msg+". 격과 인칭을 다시 확인해 보세요." }); }
+    }
+    if (wrongAny) { if (this.sess && !st.failed) this.sess.wrong("sent", s.id, 3); upd.failed=true; }
+    this.setState(upd);
+  }
+  // 파싱: 고르기만 하고(중립 색) 정답·오답은 확인 버튼에서 판정
+  pickAx(vi, ax, code){
+    const st=this.state, cur=st.pw[vi][ax]||{wrong:[],ok:false,sel:null};
+    if (cur.ok || cur.wrong.includes(code)) return;
+    const pw=st.pw.map((p,i)=>i!==vi?p:{ ...p, [ax]:{ ...cur, sel: cur.sel===code?null:code, fresh:false } });
+    this.setState({ pw });
+  }
+  axisReady(vi){ const p=this.state.pw[vi]||{}; return this.axesFor(vi).every(a=>{ const w=p[a.key]||{}; return w.ok||w.sel!=null; }); }
+  axesFor(vi){ return [{ key:"lemma", k:"원형", greek:true, opts:(this.state.lemOpts&&this.state.lemOpts[vi]||[]).map(l=>[l,l]) }, ...AXES]; }
+  verbDone(vi){ const p=this.state.pw[vi]||{}; return this.axesFor(vi).every(a=>(p[a.key]||{}).ok); }
+  next(){
+    const st=this.state, s=st.data[st.q[0]], q=[...st.q], cur=q.shift();
+    // 오답 노트(테스트 탭과 공유): 한 회차에서 처음 결과만 반영
+    if (this.sess) { if (st.failed) this.sess.wrong("sent", s.id, 3); else this.sess.right("sent", s.id); }
+    const upd = st.failed
+      ? { retry: st.retry.includes(s.id)?st.retry:[...st.retry,s.id] }
+      : { okFirst: st.retry.includes(s.id)?st.okFirst:[...st.okFirst,s.id], done:st.done+1 };
+    if (st.failed) q.push(cur); else goalTick("문장");
+    // 진행 동그라미: 학습자가 처음 끝낸 순서대로 1번부터 채움
+    if (!st.cl.some(c=>c.id===s.id)) upd.cl=[...st.cl,{ id:s.id, re:st.failed }];
+    if (!q.length) { this.markDone(); rClear(); this.setState({ ...upd, q, phase:"end", time:Math.max(1,Math.round((Date.now()-st.start)/1000)) }); return; }
+    this.setState({ ...upd, q }, ()=>this.load());
+  }
+
+  markDone(){ try { const k="gk_l03_done", d=JSON.parse(localStorage.getItem(k)||"[]");
+    if (!d.includes("sent")) localStorage.setItem(k, JSON.stringify([...d,"sent"])); } catch(e){} }
+fav(k){ const on=!!(window.gkFav&&window.gkFav.has(k)); return { fill:on?"starfill":"", color:on?"var(--accent)":"var(--muted)", ribH: on?"88px":"58px", ribBg: on?"#a85c2b":"#d9c2a2", hint: on?"책갈피에 담았어요":"끈을 내리면 책갈피에 담겨요", toggle:()=>{ if (window.gkFav) window.gkFav.toggle(k); this.forceUpdate(); } }; }
+  renderVals(){
+    const st=this.state, n=st.data.length||1, s=st.data[st.q[0]]||{verbs:[],ko:"",g:"",pg:"",note:"",koTokens:[],koTraps:[]};
+    const vDone=s.verbs.map((_,i)=>this.verbDone(i));
+    const allDone=st.trOk && vDone.every(Boolean);
+    const pct=Math.round(st.okFirst.length/n*100);
+    const optStyle=(ok,bad)=>({ bg: ok?"var(--tile-done)":"var(--tile)", bd: ok?"var(--sage)":"var(--line)",
+      fg: ok?"var(--sage-ink)":bad?"var(--muted)":"var(--ink)", op: bad?"0.45":"1" });
+    const ready=(st.trOk||(st.koAsm||[]).length>0) && s.verbs.every((_,i)=>this.axisReady(i));
+    const koN=(st.koAsm||[]).length>0||st.trOk, axN=s.verbs.every((_,i)=>this.axisReady(i));
+    return {
+      rootRef:this.rootRef,
+      xpShown: (st.xpShown||0).toLocaleString(),
+      // 보상(경험치 = 데나리온): 완료 10 + 서로 다른 문항 수 × 3 + 한 번에 맞힌 비율 90% 이상 10
+      // 반복 감소(B)·복습 보너스(C)는 서버 저장을 붙일 때 이 합계에 적용 — 보상_명세.md
+      reward: 10 + (st.data.length||0)*3 + ((Math.round(st.okFirst.length/(st.data.length||1)*100))>=90?10:0),
+      coinLabel: "경험치·데나리온 +"+(10 + (st.data.length||0)*3 + ((Math.round(st.okFirst.length/(st.data.length||1)*100))>=90?10:0)),
+      isError: st.phase==="error",
+      retryLoad: ()=>this.fetchData && this.fetchData(),
+      leaveOpen: !!st.leaveOpen,
+      askLeave: ()=>{ const busy=!["end","loading","error"].includes(st.phase); if (busy) this.setState({ leaveOpen:true, leaveTo:null }); else location.href="Lesson Menu.dc.html"; },
+      stayHere: ()=>this.setState({ leaveOpen:false }),
+      stopProp: (e)=>e.stopPropagation(),
+      goMenu: ()=>{ location.href=this.state.leaveTo||"Lesson Menu.dc.html"; },
+      goNext: ()=>{ location.href="Lesson Menu.dc.html"; },
+      wide: !st.narrow, narrow: !!st.narrow, maxW: st.narrow?"720px":"none", stIsBook: !st.narrow, nav: NAV_TABS.map(x=>{ const on=x.k==="learn"; return { ...x, onClick:(e)=>{ if (!["end","loading","error"].includes(this.state.phase)) { e.preventDefault(); this.setState({ leaveOpen:true, leaveTo:x.href }); } }, bg:on?"var(--accent-soft)":"transparent", bd:on?"var(--bd-cur)":"transparent", fg:on?"var(--accent-ink)":"var(--muted)", tc:on?"var(--accent)":"var(--muted)", tb:on?"#fffaf1":"transparent", tf:on?"var(--accent-ink)":"#d6b673", rbg:on?"url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312":"#ead9bb", rfg:on?"#d6b673":"var(--muted)", rsh:on?"2px 3px 6px rgba(30,14,4,.3)":"inset 6px 0 8px -6px rgba(30,14,4,.35),1px 2px 4px rgba(30,14,4,.18)" }; }), stOuter: !st.narrow?"min-height:calc(100vh - var(--sat) - var(--sab));display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box":"", stBook: !st.narrow?"position:fixed;left:calc((100vw - min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6))) / 2 - 30px);top:calc((100vh - min(750px, calc(100vh - 110px))) / 2);margin:0;box-sizing:border-box;width:min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6));height:min(750px, calc(100vh - 110px));border-radius:24px;border:13px solid transparent;background:linear-gradient(90deg,#f1e4ca 0%,#fbf3e3 6%,#fffaf1 30%,#f7edda 46%,#eadbbd 50%,#f7edda 54%,#fffaf1 70%,#fbf3e3 94%,#f1e4ca 100%) padding-box,url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E') border-box,#643312 border-box;outline:1.5px solid #d6b673;outline-offset:-7px;box-shadow:0 2px 3px rgba(30,14,4,.2),0 30px 54px -28px rgba(30,14,4,.42)":"", stInH: !st.narrow?"100%":"auto", stInOv: !st.narrow?"auto":"visible", stInPad: !st.narrow?"26px 22px 28px":"0", stDisp: !st.narrow?"contents":"flex", inDisp: !st.narrow?"grid":"block", inRows: !st.narrow?"auto minmax(0,1fr)":"none", hdMaxW: !st.narrow?"none":(st.narrow?"720px":"none"), hdM: !st.narrow?"0":"0 auto", hdP: !st.narrow?"0":"20px "+(st.narrow?"16px":"28px")+" 0", hdCol: !st.narrow?"1":"auto", hdRow: !st.narrow?"1":"auto", mainD: !st.narrow?"contents":"flex", stRows: !st.narrow?"auto minmax(0,1fr)":"none", sLCol: !st.narrow?"1":"auto", sLRow: !st.narrow?"2":"auto", sRCol: !st.narrow?"2":"auto", sRRow: !st.narrow?"1 / span 2":"auto", sRMt: !st.narrow?"44px 0 50px":"0", sROv: !st.narrow?"auto":"visible", ckPos: "static", ckPad: !st.narrow?"12px 0 2px":"0", ckBg: "transparent", bxPad: !st.narrow?"0":"18px 16px", bxBg: !st.narrow?"transparent":"var(--card)", bxSh: !st.narrow?"none":"0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22)", sSCol: !st.narrow?"2":"auto", sSRow: !st.narrow?"2":"auto", sSAS: !st.narrow?"end":"auto", qcBd: !st.narrow?"none":"1px solid #e8dcc6", qcBg: !st.narrow?"transparent":"#fffdf8", qcOl: !st.narrow?"none":"none", qcSh: !st.narrow?"none":"0 1px 2px rgba(46,43,37,.05),0 12px 28px -18px rgba(46,43,37,.28)", qcPos: !st.narrow?"static":"relative", qSideBg: !st.narrow?"transparent":"var(--card)", wideV: !st.narrow, sbPad: !st.narrow?"0":"20px", sbDir: !st.narrow?"row":"column", sbAI: !st.narrow?"center":"stretch", sbGap: !st.narrow?"14px":"12px", sLblD: !st.narrow?"none":"flex", dotCols: !st.narrow?"repeat(auto-fill,12px)":"repeat(auto-fill,26px)", dotGap: !st.narrow?"4px":"8px", dotSz: !st.narrow?"16px":"26px", dotF: !st.narrow?"0px":"12px", dotBw: !st.narrow?"1.5px":"2px", qSideSh: !st.narrow?"none":"0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22)", stCols: !st.narrow?"minmax(0,1fr) minmax(0,1fr)":"none", stGap: !st.narrow?"72px":"24px",
+      padX: st.narrow?"16px":"28px",
+      h1: st.narrow?"20px":"24px",
+      gkBig: st.narrow?"24px":"30px",
+      cardPad: st.narrow?"38px 18px 18px":"28px 30px",
+      subPad: st.narrow?"18px 16px":"22px 24px",
+      axW: st.narrow?"100%":"40px",
+      loading:st.phase==="loading", isQuiz:st.phase==="quiz", isEnd:st.phase==="end",
+      s, isRetry: st.retry.includes(s.id),
+      fvS: this.fav("sent:"+s.id), sentLabel: "제3과 "+(st.data.indexOf(s)+1)+"번 문장",
+      countLabel: (st.phase==="end"?n:Math.min(st.done,n))+" / "+n,
+      prog: Math.round(st.done/n*100)+"%",
+      trOk: st.trOk, trHead: st.trOk?"var(--sage-ink)":"var(--ink)",
+      koSlots: (st.koAsm||[]).map((pi,pos)=>({ t:st.koPool[pi].t,
+        bg: st.trOk?"var(--tile-done)":"var(--card)", bd: st.trOk?"var(--sage)":"var(--line)",
+        fg: st.trOk?"var(--sage-ink)":"var(--ink)", cur: st.trOk?"default":"grab",
+        onClick:()=>{ if (this.clickOk()) this.koUntap(pos); },
+        ml: st.dragOver&&st.dropIdx===pos?"34px":"0px",
+        onDown:e=>this.dragStart(e,'line',(over,idx)=>{ if (!over) this.koUntap(pos); else if (idx!=null) this.koMove(pos,idx); },!st.trOk) })),
+      koEmpty: !(st.koAsm||[]).length,
+      koOpen: !st.trOk,
+      koMsg: st.koMsg,
+      lineRef: this.lineRef,
+      lineBg: st.trOk?"var(--tile-done)":st.dragOver?(st.narrow?"var(--color-neutral-200)":"rgba(140,73,26,.06)"):(st.narrow?"var(--tile)":"transparent"),
+      lineBd: st.trOk?"var(--bd-done)":st.dragOver?"var(--color-neutral-500)":st.koMsg?"var(--wrong)":"var(--line)",
+      koPool: (st.koPool||[]).map((b,pi)=>{ const used=(st.koAsm||[]).includes(pi), bad=(st.koBad||[]).includes(pi);
+        return { t:b.t, fg: bad?"var(--muted)":"var(--ink)", deco: bad?"line-through":"none",
+          op: bad?"0.45":used?"0.3":"1", cur: used||bad?"default":"grab",
+          onClick:()=>{ if (this.clickOk()) this.koTap(pi); },
+          onDown:e=>this.dragStart(e,'pool',(over,idx)=>{ if (over) this.koTap(pi,idx); },!used&&!bad&&!st.trOk) }; }),
+      koClear: ()=>{ if (!st.trOk) this.setState({ koAsm:[], koMsg:null }); },
+      koCheck: ()=>this.koCheck(),
+      checkBg: ready?"var(--btn)":"var(--line)",
+      checkFg: ready?"var(--on-accent)":"var(--muted)",
+      checkCur: ready?"pointer":"default",
+      checkOpen: !allDone,
+      checkHint: ready ? "" : (!koN&&!axN ? "해석과 파싱을 모두 마치면 확인할 수 있어요" : !koN ? "해석 낱말을 넣으면 확인할 수 있어요" : "파싱을 모두 고르면 확인할 수 있어요"),
+      verbs: s.verbs.map((v,vi)=>{ const p=st.pw[vi]||{};
+        return { form:v.form, lemma:v.lemma, mean:v.mean, gloss:v.gloss, done:vDone[vi],
+          head: vDone[vi]?"var(--sage-ink)":"var(--ink)",
+          lemShow: !!(p.lemma&&p.lemma.ok),
+          axes: this.axesFor(vi).map(a=>{ const w=p[a.key]||{wrong:[],ok:false};
+            return { k:a.k, kfg: w.ok?"var(--sage-ink)":"var(--ink)",
+              opts: a.opts.map(([code,t])=>{ const ok=w.ok&&v[a.key]===code, dead=w.wrong.includes(code), bad=dead&&w.fresh, gone=dead&&!w.fresh, sel=!w.ok&&w.sel===code;
+                const c={ bg: ok?"var(--tile-done)":bad?"var(--wrong-soft)":sel?"var(--color-neutral-200)":(st.narrow?"var(--tile)":"rgba(140,73,26,.06)"),
+                  bd: ok?"var(--bd-done)":bad?"var(--wrong)":sel?"var(--color-neutral-500)":(st.narrow?"var(--line)":"transparent"),
+                  fg: ok?"var(--sage-ink)":bad?"var(--wrong-ink)":gone?"var(--muted)":"var(--ink)" };
+                return { t, ...c, op: bad?"0.75":gone?"0.45":"1", cur: dead||w.ok?"default":"pointer",
+                  cls: a.greek?"gk":"", ff: a.greek?"'Gentium Book Plus',serif":"'Gentium Greek','Pretendard Variable',Pretendard,sans-serif", fs: a.greek?"16px":"14px",
+                  onClick:()=>this.pickAx(vi,a.key,code) }; }) }; }) }; }),
+      allDone,
+      hasNote: !!s.note,
+      nextCta: st.q.length<=1 && !st.failed ? "결과 보기" : "다음 문장",
+      next:()=>this.next(),
+      restart:()=>this.restart(),
+      rows: st.data.map((_,i)=>{ const c=st.cl[i], live=st.phase!=="end", seen=st.cl.some(x=>x.id===s.id);
+        const now=live&&(c?c.id===s.id:(!seen&&i===st.cl.length));
+        return { n:String(i+1),
+          bg: now?"transparent":c?(c.re?"var(--wrong)":"var(--sage)"):"transparent",
+          bd: now?"var(--accent)":c?(c.re?"var(--wrong)":"var(--sage)"):"var(--line)",
+          fg: now?"var(--accent-ink)":c?"var(--on-accent)":"var(--muted)" }; }),
+      stats:[
+        { k:"한 번에 맞힘", v:pct+"%", fg: pct>=90?"var(--sage-ink)":"var(--ink)" },
+        { k:"소요 시간", v:Math.floor(st.time/60)+":"+String(st.time%60).padStart(2,"0"), fg:"var(--ink)" },
+        { xp:"src", k:"획득 보상", v:"+"+(10 + (st.data.length||0)*3 + ((Math.round(st.okFirst.length/(st.data.length||1)*100))>=90?10:0)), fg:"var(--accent-ink)" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
