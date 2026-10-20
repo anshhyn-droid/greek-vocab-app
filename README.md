@@ -30,6 +30,18 @@ Google Cloud Console의 OAuth 클라이언트 → 승인된 리디렉션 URI
 2. Vercel에서 이 저장소를 Import, 환경 변수: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
 3. `vercel.json`이 `/api/*`를 서버 함수로, 나머지는 `index.html`로 보냅니다.
 
+## 화면 (단계별 묶음 1~9단계)
+| 주소 | 화면 |
+|---|---|
+| `/` | 책 표지 → 펼치기 → Google로 계속하기 (처음이면 약관 동의) |
+| `/learn` · `/learn/:n` | 학습 홈(지금 할 과 책갈피·오늘의 목표·목차) · 과 메뉴 |
+| `/study/:n/word` · `gram` · `sent` | 단어 · 문법 · 문장 학습 (이어서 하기 7일) |
+| `/test` | 테스트(단어·플래시 카드·문법·문장) · 오답 노트 · 책갈피 |
+| `/me` | 학습 기록 · 설정(글자 크기) · 기록 초기화 · 회원 탈퇴 |
+
+- 경험치·오답 노트·오늘의 목표는 서버가 계산합니다(`server/routes/runs.ts`, `server/reward.ts`). 화면이 보낸 점수는 쓰지 않습니다.
+- 학습 기록 초기화와 회원 탈퇴는 로그인한 지 1시간 안에만 됩니다(보안 명세 6-11). 지났으면 다시 로그인 안내.
+
 ## 로그인 흐름
 - 첫 화면 = 닫힌 책 표지 → 눌러서 펼치기 → "Google로 계속하기"
 - 처음 가입이면 약관 동의(만 14세 이상·이용약관·개인정보 수집·이용, 모두 필수). 동의하기 전에는 계정을 만들지 않고(Google 정보는 10분짜리 암호화 쿠키에만), 동의하면 users, user_consents, user_settings, user_goals, user_stats 기본 행을 한 번에 만듭니다.

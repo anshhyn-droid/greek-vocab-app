@@ -3,7 +3,7 @@
 .count { flex: none; margin-left: auto; font: 700 18px 'Hahmlet', serif; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .progLabel { flex: none; font: 700 12px var(--f-body); letter-spacing: .06em; color: var(--muted); }
 .endSide { flex: 1; display: flex; align-items: flex-end; }
-.headHint { display: block; max-width: 190px; white-space: normal; text-align: right; font: 600 12px/1.4 var(--f-body); color: var(--muted); word-break: keep-all; }
+.headHint { display: block; max-width: 190px; min-width: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal; text-align: right; font: 600 12px/1.4 var(--f-body); color: var(--muted); word-break: keep-all; }
 
 .leftPage { flex: 1; display: flex; flex-direction: column; gap: 16px; }
 .rightPage { position: relative; flex: 1; min-height: 100%; display: flex; flex-direction: column; gap: 12px; }

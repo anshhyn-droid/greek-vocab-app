@@ -19,15 +19,15 @@
 .clear:hover { color: var(--ink); }
 
 .items { display: flex; flex-direction: column; gap: 12px; }
-.item { padding: 17px 18px; border-radius: 26px; background: var(--card); border: 1.5px solid transparent; box-shadow: 0 1px 2px rgba(46, 43, 37, .06), 0 8px 24px -16px rgba(46, 43, 37, .22); display: flex; align-items: center; gap: 14px; text-align: left; transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); --tint: var(--tile); --ink2: var(--muted); }
+.item { flex-wrap: wrap; padding: 17px 18px; border-radius: 26px; background: var(--card); border: 1.5px solid transparent; box-shadow: 0 1px 2px rgba(46, 43, 37, .06), 0 8px 24px -16px rgba(46, 43, 37, .22); display: flex; align-items: center; gap: 14px; text-align: left; transition: transform .2s cubic-bezier(.34, 1.56, .64, 1); --tint: var(--tile); --ink2: var(--muted); }
 .item:hover { transform: scale(1.02); }
 .item:active { transform: scale(.96); }
 .item[data-tone='next'] { border-color: #eeb98d; --tint: var(--accent-soft); --ink2: var(--accent-ink); }
 .item[data-tone='done'] { background: #e7efd6; border-color: #c3d2a4; --tint: var(--sage-soft); --ink2: var(--sage-ink); }
 .icon { width: 46px; height: 46px; flex: none; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: var(--tint); color: var(--ink2); }
-.itemText { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.itemText { flex: 1 1 140px; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .itemText > div { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.itemText b { font: 700 16px var(--f-body); }
+.itemText b { font: 700 16px var(--f-body); white-space: nowrap; }
 .itemText > div span { font: 700 12px var(--f-body); color: var(--muted); }
 .itemText > span { font: 500 14px/1.5 var(--f-body); color: var(--muted); word-break: keep-all; }
-.badge { flex: none; display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 999px; background: var(--tint); color: var(--ink2); font: 700 12px var(--f-body); white-space: nowrap; }
+.badge { flex: none; margin-left: auto; display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 999px; background: var(--tint); color: var(--ink2); font: 700 12px var(--f-body); white-space: nowrap; }

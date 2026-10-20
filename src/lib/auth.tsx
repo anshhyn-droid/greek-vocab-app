@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { api, setUnauthorizedHandler } from './api';
 import { IDLE_MS, LAST_ACTIVE, LOGOUT_REASON, markActive } from './idle';
 import { LS } from './storage';
+import { setFontSize } from './viewport';
 
 export const CONSENT_TYPES = ['age', 'terms', 'privacy'] as const;
 
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (out.current) return;
     out.current = true;
     LS.wipe();
+    setFontSize('m');
     if (reason !== 'manual') LS.set(LOGOUT_REASON, reason);
     setProfile(null);
     setStatus('signedOut');
@@ -60,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const r = await api<{ status: Status; profile?: Profile; reason?: string }>('/api/me');
+      const r = await api<{ status: Status; profile?: Profile; reason?: string; fontSize?: string }>('/api/me');
       if (r.status !== 'signedOut') out.current = false;
       if (r.status === 'ready') {
         // 이 기기에서 하루 넘게 움직임이 없었으면 로그아웃 (마지막 활동 = 클릭·키 입력)
@@ -68,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (last && Date.now() - last > IDLE_MS) return signOut('idle');
         if (!last) markActive();
         setProfile(r.profile!);
+        setFontSize(r.fontSize || 'm');
       } else {
         setProfile(null);
         if (r.reason === 'idle') finishSignOut('idle');

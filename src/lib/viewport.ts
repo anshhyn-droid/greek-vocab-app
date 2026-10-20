@@ -19,14 +19,28 @@ export function bookSize(w: number, h: number): BookSize {
   return { w, h, narrow: w < PHONE_MAX, BH, BW, left: (w - BW) / 2 - 30, top: (h - BH) / 2 };
 }
 
+// 글자 크기(마이페이지): 보통·크게·아주 크게 → 화면 전체 배율 (design/gk-session.js)
+// 배율을 곱한 만큼 책이 창을 넘지 않도록, 책 크기는 배율로 나눈 창 크기로 계산
+export const ZOOM: Record<string, number> = { m: 1, l: 1.08, xl: 1.16 };
+let zoom = 1;
+const measure = () => bookSize(Math.round(window.innerWidth / zoom), Math.round(window.innerHeight / zoom));
+
 // 창 크기는 리스너 하나가 계산하고, 이 값을 쓰는 화면 모두에게 알림
-let snap = bookSize(window.innerWidth, window.innerHeight);
+let snap = measure();
 const subs = new Set<() => void>();
-window.addEventListener('resize', () => {
-  if (window.innerWidth === snap.w && window.innerHeight === snap.h) return;
-  snap = bookSize(window.innerWidth, window.innerHeight);
+const refresh = () => {
+  const next = measure();
+  if (next.w === snap.w && next.h === snap.h) return;
+  snap = next;
   subs.forEach((cb) => cb());
-});
+};
+window.addEventListener('resize', refresh);
+
+export function setFontSize(size: string) {
+  zoom = ZOOM[size] || 1;
+  document.documentElement.style.zoom = zoom === 1 ? '' : String(zoom);
+  refresh();
+}
 const subscribe = (cb: () => void) => {
   subs.add(cb);
   return () => { subs.delete(cb); };

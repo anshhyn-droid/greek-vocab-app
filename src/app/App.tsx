@@ -6,7 +6,7 @@ import { IdleWatcher } from '../lib/idle';
 import DataCheck from '../screens/DataCheck';
 import Home from '../screens/Home';
 import LessonMenu from '../screens/LessonMenu';
-import Placeholder from '../screens/Placeholder';
+import MyPage from '../screens/MyPage';
 import StudyRoute from '../screens/study/StudyRoute';
 import TestHome from '../screens/test/TestHome';
 import Start from '../screens/Start';
@@ -39,7 +39,7 @@ export default function App() {
               <Route path="/learn/:n" element={<LessonMenu />} />
               <Route path="/study/:n/:type" element={<StudyRoute />} />
               <Route path="/test" element={<TestHome />} />
-              <Route path="/me" element={<Placeholder title="마이페이지" />} />
+              <Route path="/me" element={<MyPage />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

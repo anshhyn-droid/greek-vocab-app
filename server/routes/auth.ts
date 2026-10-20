@@ -134,5 +134,6 @@ export async function me(req: Request) {
   }
   const ss = s as Session;
   if (!ss.consented || !(await hasConsent(ss.user.id, await getDb()))) return json({ status: 'needsConsent' });
-  return json({ status: 'ready', profile: ss.user, idleExpiresAt: ss.idleExpiresAt });
+  const fs = await (await getDb()).get<{ font_size: string }>('SELECT font_size FROM user_settings WHERE user_id = ?', ss.user.id);
+  return json({ status: 'ready', profile: ss.user, idleExpiresAt: ss.idleExpiresAt, fontSize: fs?.font_size || 'm' });
 }
