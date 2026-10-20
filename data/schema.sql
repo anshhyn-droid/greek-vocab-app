@@ -14,12 +14,38 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- 로그인 세션. 브라우저에는 토큰만 두고, 서버에는 토큰의 해시를 저장
+-- expires_at: 로그인 후 30일(절대 만료) / idle_expires_at: 마지막 요청 + 하루(요청마다 연장)
+-- (기존 DB에는 db.js가 idle_expires_at 열을 덧붙임)
 CREATE TABLE IF NOT EXISTS auth_sessions (
-  token_hash TEXT PRIMARY KEY,
-  user_id    TEXT NOT NULL REFERENCES users(id),
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  expires_at TEXT NOT NULL
+  token_hash      TEXT PRIMARY KEY,
+  user_id         TEXT NOT NULL REFERENCES users(id),
+  created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+  expires_at      TEXT NOT NULL,
+  idle_expires_at TEXT
 );
+
+-- 약관 동의. type: age(만 14세 이상) / terms(이용약관) / privacy(개인정보 수집·이용), 모두 필수
+-- 약관 버전이 바뀌면 다음 로그인 때 새 버전으로 다시 받음
+CREATE TABLE IF NOT EXISTS user_consents (
+  user_id   TEXT NOT NULL REFERENCES users(id),
+  type      TEXT NOT NULL,
+  version   TEXT NOT NULL,
+  agreed    INTEGER NOT NULL,
+  agreed_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (user_id, type, version)
+);
+
+-- 접속 기록. event: login / logout / idle_logout / withdraw / reset
+-- 이메일 등 개인정보는 남기지 않음. 탈퇴하면 user_id를 비우고, 3개월 지나면 삭제
+CREATE TABLE IF NOT EXISTS access_logs (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id   TEXT,
+  event     TEXT NOT NULL,
+  ip_masked TEXT NOT NULL,
+  client    TEXT,
+  at        TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_access_logs_at ON access_logs(at);
 
 CREATE TABLE IF NOT EXISTS user_settings (
   user_id       TEXT PRIMARY KEY REFERENCES users(id),

@@ -21,6 +21,8 @@ GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 # 배포 주소가 요청 주소와 다를 때만
 # APP_URL=https://example.com
+# 자동 로그아웃 시간(초)을 줄여 확인할 때만. 기본 86400(하루)
+# SESSION_IDLE_SEC=120
 ```
 
 승인된 리디렉션 URI: `http://localhost:3000/api/auth/callback/google` (배포 시 그 주소로 하나 더)

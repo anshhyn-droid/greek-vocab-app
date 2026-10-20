@@ -1,6 +1,7 @@
 import { withUser, badRequest } from '@/lib/auth';
 import { getDb } from '@/lib/db';
 import { dashboard, setDailyGoal } from '@/lib/dashboard';
+import { cleanName } from '@/lib/users';
 
 const LANGS = { 한국어: 'ko', English: 'en', 日本語: 'ja' };
 
@@ -12,7 +13,7 @@ export const PATCH = withUser(async (request, user) => {
   const b = await request.json();
   const db = await getDb();
   if ('name' in b) {
-    const name = String(b.name || '').trim().slice(0, 30);
+    const name = cleanName(b.name);
     if (!name) throw badRequest('name');
     await db.run('UPDATE users SET display_name = ? WHERE id = ?', name, user.id);
   }

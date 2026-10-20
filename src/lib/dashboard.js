@@ -1,6 +1,6 @@
 // 목차·마이페이지에 보여줄 값 (서버 전용)
 import { getDb } from './db';
-import { getSettings } from './users';
+import { getSettings, maskEmail } from './users';
 import { localDate, addDays } from './time';
 import { allLessons } from './content';
 import { liveStreak } from './record';
@@ -10,8 +10,7 @@ export async function profile(user) {
   const s = await getSettings(user.id);
   return {
     name: user.display_name,
-    email: user.email,
-    avatar: user.avatar_url,
+    email: maskEmail(user.email), // 앞 두 글자만 (전체 주소는 화면에 보내지 않음)
     inviteCode: user.invite_code,
     settings: { lang: s.ui_lang, mode: s.theme_mode, greekSize: s.greek_size, remind: !!s.remind_on, sound: !!s.sound_on },
   };

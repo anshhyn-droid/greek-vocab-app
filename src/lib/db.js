@@ -17,6 +17,14 @@ function wrap(exec) {
   };
 }
 
+// 이미 만들어진 DB를 지금 schema.sql에 맞춤 (CREATE IF NOT EXISTS는 열을 더하지 않음)
+async function migrate(client) {
+  const cols = (await client.execute('PRAGMA table_info(auth_sessions)')).rows.map((r) => r.name);
+  if (!cols.includes('idle_expires_at')) await client.execute('ALTER TABLE auth_sessions ADD COLUMN idle_expires_at TEXT');
+  // 프로필 사진은 저장하지 않음 (보안·개인정보 명세 1)
+  await client.execute('UPDATE users SET avatar_url = NULL WHERE avatar_url IS NOT NULL');
+}
+
 async function open() {
   const url = process.env.TURSO_DATABASE_URL;
   const client = createClient(
@@ -25,6 +33,7 @@ async function open() {
   if (!url) await client.execute('PRAGMA journal_mode = WAL');
   await client.execute('PRAGMA foreign_keys = ON');
   await client.executeMultiple(fs.readFileSync(path.join(dataDir, 'schema.sql'), 'utf8'));
+  await migrate(client);
   const db = wrap((stmt) => client.execute(stmt));
   // transaction(async (tx) => …): tx도 get·all·run. 오류가 나면 모두 되돌림
   db.transaction = async (fn) => {

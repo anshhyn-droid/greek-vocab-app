@@ -8,6 +8,8 @@ import { lessonNum } from './lesson';
 import { badRequest } from './auth';
 
 const MODES = ['word', 'gram', 'sent', 'review', 'ox', 'note'];
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 6;
 const STUDY_TYPE = { word: 'word', gram: 'gram', sent: 'sent' }; // 과 학습 → lesson_progress.type
 const ITEM_TABLE = {
   word: ['words', 'word_id'],
@@ -34,6 +36,16 @@ export async function completeSession(user, payload) {
   const { mode, durationSec, items, ox } = payload || {};
   if (!MODES.includes(mode)) throw badRequest('mode');
   if (!Array.isArray(items) || !items.length || items.length > 1000) throw badRequest('items');
+
+  // 짧은 시간에 몰린 완료 요청은 거절 (1분에 6번까지)
+  const recent = await (await getDb()).get(
+    'SELECT COUNT(*) n FROM study_sessions WHERE user_id = ? AND ended_at > ?', user.id, new Date(Date.now() - RATE_WINDOW_MS).toISOString()
+  );
+  if (recent.n >= RATE_MAX) {
+    const e = new Error('too_many');
+    e.status = 429;
+    throw e;
+  }
 
   // 실제로 있는 문항의 과 (종류마다 한 번에 조회)
   const lessonOf = {};

@@ -1,5 +1,6 @@
 import './globals.css';
-import { getCurrentUser } from '@/lib/auth';
+import { getSession } from '@/lib/auth';
+import IdleGuard from '@/components/IdleGuard';
 import { getSettings, GREEK_SCALE } from '@/lib/users';
 
 export const metadata = {
@@ -16,7 +17,8 @@ const FONTS =
 
 export default async function RootLayout({ children }) {
   // 설정의 그리스어 글자 크기를 모든 화면에 적용
-  const user = await getCurrentUser();
+  const s = await getSession();
+  const user = s.user && s.consented ? s.user : null;
   const size = user ? (await getSettings(user.id))?.greek_size : 'm';
   return (
     <html lang="ko" style={{ '--gk-scale': GREEK_SCALE[size] || 1 }}>
@@ -25,7 +27,11 @@ export default async function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link rel="stylesheet" href={FONTS} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* 하루 미사용 자동 로그아웃 안내 (로그인한 동안만) */}
+        {user && <IdleGuard initialExpiresAt={s.idleExpiresAt} />}
+      </body>
     </html>
   );
 }
