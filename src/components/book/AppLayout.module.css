@@ -1,0 +1,97 @@
+/* ── 컴퓨터: 펼친 책 ── */
+.book {
+  position: fixed;
+  border-radius: 24px;
+  border: 13px solid transparent;
+  background: var(--leather-tex) border-box, #643312 border-box;
+  outline: 1.5px solid var(--gold);
+  outline-offset: -7px;
+  box-shadow: 0 2px 3px rgba(30, 14, 4, .2), 0 30px 54px -28px rgba(30, 14, 4, .42);
+}
+/* 책 안(종이). 쪽 내용은 BookPages가 채움 */
+.inside {
+  position: absolute;
+  inset: 0;
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+/* 오른쪽 가죽 탭: 둥근 모서리(24px)를 피해 세로 직선 부분에만 닿음 → 위아래 11px(+테두리 13px) */
+.tabs {
+  position: absolute;
+  right: -60px;
+  top: 11px;
+  bottom: 11px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tab {
+  width: 47px;
+  flex: 1;
+  min-height: 0;
+  border-radius: 0 16px 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ead9bb;
+  color: var(--muted);
+  box-shadow: inset 6px 0 8px -6px rgba(30, 14, 4, .35), 1px 2px 4px rgba(30, 14, 4, .18);
+}
+.tab[data-on='true'] {
+  background: var(--leather-tex), #643312;
+  color: var(--gold);
+  box-shadow: 2px 3px 6px rgba(30, 14, 4, .3);
+}
+.tab:hover { filter: brightness(1.05); }
+.tab span {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  font: 700 18px 'Hahmlet', serif;
+  letter-spacing: .03em;
+}
+
+/* ── 폰: 화면 전체가 책 한 쪽 ── */
+.phone { min-height: 100vh; background: var(--ground); }
+.phoneContent {
+  min-height: 100vh;
+  padding: calc(28px + var(--sat)) 22px calc(112px + var(--sab));
+}
+.phoneFrame { position: fixed; inset: 0; z-index: 29; pointer-events: none; overflow: hidden; }
+.phoneLeather {
+  position: absolute;
+  top: 7px; left: 7px; right: 7px; bottom: -40px;
+  border-radius: 22px;
+  box-shadow: 0 0 0 40px #643312;
+}
+.phoneGold {
+  position: absolute;
+  top: 12px; left: 12px; right: 12px; bottom: -40px;
+  border: 1.5px solid var(--gold);
+  border-radius: 18px;
+}
+.tabBar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 30;
+  display: flex;
+  gap: 6px;
+  padding: 0 18px calc(12px + var(--sab));
+  background: var(--leather-tex), #643312;
+  box-shadow: 0 -1px 0 var(--gold);
+}
+.tabBarItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 0 8px;
+  border-radius: 0 0 16px 16px;
+  color: var(--gold);
+  font: 700 12px var(--f-body);
+  transition: transform .2s cubic-bezier(.34, 1.56, .64, 1);
+}
+.tabBarItem:active { transform: scale(.96); }
+.tabBarItem[data-on='true'] { background: #fffaf1; color: var(--accent-ink); }

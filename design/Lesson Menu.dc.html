@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>:root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}</style>
+<link rel="stylesheet" href="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/styles.css">
+<script src="_ds/organic-006e78d2-136e-4daf-be1e-6321aae247a4/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,700&family=Hahmlet:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="greek-font.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="gk-session.js"></script>
+<style>
+html,body{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}body{margin:0;background:var(--color-bg);font-family:"Gentium Greek","Pretendard Variable",Pretendard,sans-serif}
+a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-accent-800)}
+.ic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.ic svg{width:100%;height:100%;display:block;stroke-width:2.75}
+.app{--ground:#f5ead8;--card:#fffaf1;--tile:#fffdf8;--ink:#201e1d;--muted:oklch(.455 .018 45);--line:#e8dcc6;--accent:#c67139;--accent-soft:#ffe1d0;--accent-ink:#8c491a;--tile-cur:#ffe8d6;--bd-cur:#eeb98d;--btn:#a85c2b;--btn-hover:#8a4720;--btn-plate:#cf8550;--on-accent:oklch(.975 .006 85);--sage:#7a8a5e;--sage-soft:#e1eecc;--sage-ink:#56633f;--tile-done:#e7efd6;--bd-done:#c3d2a4;--glow:rgba(112,58,20,.13)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" class="app" style="min-height:100vh;padding-top:var(--sat);padding-bottom:var(--sab);box-sizing:border-box;background:var(--ground);color:var(--ink);display:flex;align-items:stretch">
+
+  <sc-if value="{{ showSide }}" hint-placeholder-val="{{ true }}">
+    <aside style="width:228px;flex:none;position:sticky;top:0;height:100vh;box-sizing:border-box;padding:30px 16px;border-right:1.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:30px">
+      <a href="Start.dc.html" title="앱 이름 자리 — 이름이 정해지면 교체" style="padding:0 14px;font-family:'Gentium Book Plus',serif;font-style:italic;font-weight:700;font-size:27px;line-height:1;color:var(--accent)">Ἑλληνική</a>
+      <nav style="display:flex;flex-direction:column;gap:6px">
+        <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3">
+          <a href="{{ t.href }}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:999px;background:{{ t.bg }};border:1.5px solid {{ t.bd }};color:{{ t.fg }};font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)"><span class="ic" style="width:19px;height:19px"><i data-lucide="{{ t.icon }}"></i></span>{{ t.label }}</a>
+        </sc-for>
+      </nav>
+    </aside>
+  </sc-if>
+
+  <main data-screen-label="과 메뉴" style="flex:1;min-width:0">
+    <div style="position:relative;max-width:{{ lmMax }};margin:0 auto;padding:{{ pad }};box-sizing:border-box;min-height:{{ lmMinH }};justify-content:{{ lmJ }};align-items:{{ lmAI }};display:flex;flex-direction:column;gap:18px;animation:pop .25s ease-out">
+      <div style="position:{{ fxPos }};left:{{ fxL }};top:{{ fxT }};box-sizing:border-box;width:{{ bkW }};height:{{ bkH }};border-radius:{{ bkR }};border:{{ bkBd }};background:{{ bkBg }};outline:{{ bkOl }};outline-offset:-7px;box-shadow:{{ bkSh }}">
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;top:0;bottom:0;left:50%;width:64px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(46,43,37,0),rgba(46,43,37,.06) 42%,rgba(46,43,37,.12) 50%,rgba(46,43,37,.06) 58%,rgba(46,43,37,0));pointer-events:none;z-index:0"></div></sc-if>
+        <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}"><nav style="position:absolute;right:-60px;top:11px;bottom:11px;z-index:3;display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3"><a href="{{ t.href }}" title="{{ t.label }}" style="width:47px;flex:1;min-height:110px;border-radius:0 16px 16px 0;background:{{ t.rbg }};box-shadow:{{ t.rsh }};display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none" style-hover="filter:brightness(1.05)"><span style="writing-mode:vertical-rl;white-space:nowrap;font:700 18px 'Hahmlet',serif;letter-spacing:.03em;color:{{ t.rfg }}">{{ t.label }}</span></a></sc-for>
+            </nav></sc-if>
+        <div style="position:relative;z-index:1;height:100%;box-sizing:border-box;overflow-y:auto;scrollbar-width:none;display:grid;grid-template-columns:{{ lmCols }};column-gap:{{ lmGap }};row-gap:18px;align-content:start;padding:{{ bkPad }}">
+          <div style="display:flex;flex-direction:column;gap:{{ lmLGap }};min-width:0">
+      
+      
+      
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <a href="Start.dc.html" title="학습으로" style="width:36px;height:36px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--line);color:var(--ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="background:var(--tile);color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)"><span class="ic" style="width:18px;height:18px"><i data-lucide="chevron-left"></i></span></a>
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">제3과</span>
+          <span style="font:600 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">성경 헬라어</span>
+        </div>
+      </div>
+
+      <div style="position:relative;overflow:hidden;padding:{{ heroPad }};border-radius:{{ hR }};border:{{ hBd }};background:{{ hBg }};outline:{{ hOl }};outline-offset:-5px;box-shadow:{{ hSh }};display:flex;flex-direction:column;gap:14px">
+      <span aria-hidden="true" style="position:absolute;right:{{ gkR }};bottom:{{ gkB }};font-family:'Hahmlet',serif;font-weight:700;font-size:{{ gkF }};line-height:1;color:var(--accent-ink);opacity:.1;pointer-events:none">3</span>
+      <div style="position:relative;display:flex;flex-direction:column;gap:8px">
+        <span style="font:700 14px 'Hahmlet',serif;letter-spacing:.06em;color:var(--accent-ink)">3과</span>
+        <span style="font-family:'Gentium Greek','Hahmlet',serif;font-weight:700;font-size:{{ h1 }};line-height:1.15;color:var(--ink)">동사</span>
+        <span style="font:500 14px/1.6 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);max-width:520px;word-break:keep-all">단어를 익히고, 문법을 확인한 뒤, 연습 문장을 해석하고 파싱합니다.</span>
+      </div>
+
+      <div style="position:relative;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:160px;height:10px;border-radius:999px;background:var(--line);overflow:hidden">
+          <div style="height:100%;width:{{ pct }};border-radius:999px;background:var(--sage);transition:width .3s"></div>
+        </div>
+        <span style="font:700 14px 'Pretendard Variable',Pretendard,sans-serif;color:var(--sage-ink)">{{ doneLabel }}</span>
+        <sc-if value="{{ anyDone }}" hint-placeholder-val="{{ false }}">
+          <span onClick="{{ reset }}" style="cursor:pointer;font:700 14px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="color:var(--ink);transform:scale(1.05)" style-active="transform:scale(.96)">기록 지우기</span>
+        </sc-if>
+      </div>
+      </div>
+
+      </div>
+          <div style="display:flex;flex-direction:column;gap:18px;min-width:0;padding-top:{{ lmRTop }}"><div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+          <a href="{{ it.href }}" style="padding:17px 18px;border-radius:26px;background:{{ it.bg }};border:1.5px solid {{ it.bd }};box-shadow:0 1px 2px rgba(46,43,37,.06),0 8px 24px -16px rgba(46,43,37,.22);display:flex;align-items:center;gap:14px;color:var(--ink);transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.96)">
+            <span style="width:46px;height:46px;flex:none;border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ it.tint }};color:{{ it.ink }}"><span class="ic" style="width:20px;height:20px"><i data-lucide="{{ it.icon }}"></i></span></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+              <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                <span style="font:700 16px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--ink)">{{ it.title }}</span>
+                <span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted)">{{ it.count }}</span>
+              </div>
+              <span style="font:500 14px/1.5 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;color:var(--muted);word-break:keep-all">{{ it.sub }}</span>
+            </div>
+            <span style="flex:none;display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:999px;background:{{ it.tint }};color:{{ it.ink }};font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif;white-space:nowrap">{{ it.badge }}</span>
+          </a>
+        </sc-for>
+      </div>
+
+      
+    
+      </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:29;pointer-events:none;overflow:hidden"><div style="position:absolute;top:7px;left:7px;right:7px;bottom:-40px;border-radius:22px;box-shadow:0 0 0 40px #643312"></div><div style="position:absolute;top:12px;left:12px;right:12px;bottom:-40px;border:1.5px solid #d6b673;border-radius:18px"></div></div>
+    <nav style="position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:6px;padding:0 18px calc(12px + var(--sab));background:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312;box-shadow:0 -1px 0 #d6b673">
+      <sc-for list="{{ nav }}" as="t" hint-placeholder-count="3">
+        <a href="{{ t.href }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;border-radius:0 0 16px 16px;background:{{ t.tb }};color:{{ t.tf }};transition:transform .2s cubic-bezier(.34,1.56,.64,1)" style-active="transform:scale(.96)"><span class="ic" style="width:21px;height:21px"><i data-lucide="{{ t.icon }}"></i></span><span style="font:700 12px 'Gentium Greek','Pretendard Variable',Pretendard,sans-serif">{{ t.label }}</span></a>
+      </sc-for>
+    </nav>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEY="gk_l03_done";
+const STEPS=[
+  { key:"word", title:"단어 학습", sub:"뜻을 보며 배운 뒤, 단어만 보고 외웁니다.", count:"단어 9개", icon:"book-a", href:"Word Study.dc.html" },
+  { key:"gram", title:"문법 학습", sub:"동사의 유형, 태와 법, 현재 능동 어미를 문제로 확인합니다.", count:"38문항", icon:"list-checks", href:"Grammar Study.dc.html" },
+  { key:"sent", title:"문장 학습", sub:"헬라어 문장을 해석 블록으로 풀고, 동사를 원형부터 인칭까지 파싱합니다.", count:"9문장", icon:"blocks", href:"Sentence Study.dc.html" }
+];
+const NAV=[{k:"learn",label:"학습",icon:"house",href:"Start.dc.html"},{k:"test",label:"테스트",icon:"clipboard-check",href:"Review.dc.html"},{k:"me",label:"마이페이지",icon:"user-round",href:"Start.dc.html#me"}];
+class Component extends DCLogic {
+  state = { done:[], w:1080 };
+  rootRef = React.createRef();
+  componentDidMount(){
+    this.read(); this.onFocus=()=>this.read(); window.addEventListener("focus", this.onFocus);
+    // 폭: 창(iframe) 너비로 판단 — 700px 미만이면 폰 레이아웃
+    this.onResize=()=>{ const w=window.innerWidth; if (w!==this.state.w) this.setState({ w }); };
+    window.addEventListener("resize", this.onResize); this.onResize();
+    this.icons();
+  }
+  componentDidUpdate(){ this.icons(); }
+  componentWillUnmount(){ window.removeEventListener("resize", this.onResize); window.removeEventListener("focus", this.onFocus); if (this.ro) this.ro.disconnect(); }
+  icons(){ if (window.lucide && this.rootRef.current) window.lucide.createIcons({ root:this.rootRef.current }); }
+  read(){ try { this.setState({ done: JSON.parse(localStorage.getItem(KEY)||"[]") }); } catch(e){} }
+  renderVals(){
+    const st=this.state, narrow=st.w<700, next=STEPS.find(s=>!st.done.includes(s.key));
+    return {
+      rootRef:this.rootRef, narrow, wide:!narrow,
+      nav: NAV.map(x=>{ const on=x.k==="learn"; return { ...x, bg:on?"var(--accent-soft)":"transparent", bd:on?"var(--bd-cur)":"transparent", fg:on?"var(--accent-ink)":"var(--muted)", tc:on?"var(--accent)":"var(--muted)", tb:on?"#fffaf1":"transparent", tf:on?"var(--accent-ink)":"#d6b673", rbg:on?"url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E'),#643312":"#ead9bb", rfg:on?"#d6b673":"var(--muted)", rsh:on?"2px 3px 6px rgba(30,14,4,.3)":"inset 6px 0 8px -6px rgba(30,14,4,.35),1px 2px 4px rgba(30,14,4,.18)" }; }),
+      showSide: false, fxPos: narrow?"relative":"fixed", fxL: narrow?"auto":"calc((100vw - min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6))) / 2 - 30px)", fxT: narrow?"auto":"calc((100vh - min(750px, calc(100vh - 110px))) / 2)", bkR: narrow?"0":"24px", bkBd: narrow?"none":"13px solid transparent", bkW: narrow?"auto":"min(1100px, calc(100vw - 130px), calc(min(750px, calc(100vh - 110px)) * 1.6))", bkH: narrow?"auto":"min(750px, calc(100vh - 110px))", bkBg: narrow?"transparent":"linear-gradient(90deg,#f1e4ca 0%,#fbf3e3 6%,#fffaf1 30%,#f7edda 46%,#eadbbd 50%,#f7edda 54%,#fffaf1 70%,#fbf3e3 94%,#f1e4ca 100%) padding-box,url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%221.1%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20values%3D%220%200%200%200%20.1%20%200%200%200%200%20.04%20%200%200%200%200%200%20%200%200%200%20.1%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20filter%3D%22url(%23g)%22%2F%3E%3C%2Fsvg%3E') border-box,#643312 border-box", bkOl: narrow?"none":"1.5px solid #d6b673", bkSh: narrow?"none":"0 2px 3px rgba(30,14,4,.2),0 30px 54px -28px rgba(30,14,4,.42)", bkPad: narrow?"0":"34px 36px 34px", lmCols: narrow?"minmax(0,1fr)":"minmax(0,1fr) minmax(0,1fr)", lmGap: narrow?"0":"72px", lmLGap: narrow?"18px":"34px", lmRTop: narrow?"0":"70px",
+      hR: narrow?"22px":"20px", hBd: "none", hBg: narrow?"rgba(140,73,26,.05)":"rgba(140,73,26,.06)", hOl: "none", hSh: "none", pad: narrow?"28px 22px 112px":"24px 80px 24px 24px", lmMax: narrow?"760px":"none", lmMinH: narrow?"0":"calc(100vh - var(--sat) - var(--sab))", lmJ: narrow?"flex-start":"center", lmAI: narrow?"stretch":"center", h1: narrow?"26px":"32px",
+      heroPad: narrow?"20px 20px":"28px 30px", gkF: narrow?"130px":"190px", gkR: narrow?"14px":"30px", gkB: narrow?"-30px":"-46px",
+      pct: Math.round(st.done.length/STEPS.length*100)+"%",
+      doneLabel: st.done.length+" / "+STEPS.length+" 완료",
+      anyDone: st.done.length>0,
+      reset: ()=>{ try{ localStorage.removeItem(KEY); }catch(e){} this.setState({ done:[] }); },
+      items: STEPS.map(s=>{ const done=st.done.includes(s.key), isNext=next&&s.key===next.key,
+          rs=(()=>{ try { const r=JSON.parse(localStorage.getItem("gk_resume_l03_"+s.key)||"null"); return r&&Date.now()-r.savedAt<7*864e5?r:null; } catch(e){ return null; } })();
+        return { ...s, badge: rs?"이어서 · "+rs.at:done?"완료":isNext?"이어서":"시작",
+          bg: isNext?"var(--card)":done?"var(--tile-done)":"var(--card)",
+          bd: isNext?"var(--bd-cur)":done?"var(--bd-done)":"transparent",
+          tint: done?"var(--sage-soft)":isNext?"var(--accent-soft)":"var(--tile)",
+          ink: done?"var(--sage-ink)":isNext?"var(--accent-ink)":"var(--muted)" }; }),
+      ctaHref: next?next.href:STEPS[0].href,
+      ctaLabel: next?(st.done.length?"이어서 · ":"시작 · ")+next.title:"처음부터 다시",
+      ctaAlign: narrow?"stretch":"flex-start"
+    };
+  }
+}
+</script>
+</body>
+</html>

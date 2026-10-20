@@ -1,0 +1,15 @@
+.spread { position: absolute; inset: 0; display: grid; }
+/* 가운데 접힌 곳 그림자 (폭 64px) */
+.fold {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 64px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(46, 43, 37, 0), rgba(46, 43, 37, .06) 42%, rgba(46, 43, 37, .12) 50%, rgba(46, 43, 37, .06) 58%, rgba(46, 43, 37, 0));
+  pointer-events: none;
+  z-index: 1;
+}
+/* 넘치면 쪽 안에서 스크롤 (스크롤바 숨김) */
+.page { position: relative; min-width: 0; min-height: 0; height: 100%; display: flex; flex-direction: column; }
+.phone { display: flex; flex-direction: column; }
+.phonePage { min-width: 0; display: flex; flex-direction: column; }
