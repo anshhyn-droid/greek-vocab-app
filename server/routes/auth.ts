@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { getDb, type Db } from '../db.js';
 import { HttpError, appOrigin, body, clearCookie, cookie, json, readCookies, redirect } from '../http.js';
 import { PENDING_COOKIE, PENDING_SEC, newPkce, openPending, sealPending, verifyIdToken, type GoogleClaims } from '../google.js';
-import { CONSENT_TYPES, CONSENT_VERSION, checkCsrf, clearSession, createSession, endSession, getSession, hasConsent, logAccess, purgeOldLogs, type Session } from '../session.js';
+import { CONSENT_TYPES, CONSENT_VERSION, checkCsrf, clearSession, createSession, endSession, getSession, hasConsent, logAccess, purgeOldLogs, sameOrigin, type Session } from '../session.js';
 
 const STATE = 'gk_oauth_state';
 const PKCE = 'gk_oauth_pkce';
@@ -74,11 +74,13 @@ const cleanName = (v: unknown) => [...String(v ?? '').replace(CONTROL, '').trim(
 
 // 약관 동의 { age, terms, privacy } 모두 true → 새 사용자: 가입(users·동의·설정·목표·통계) + 로그인 / 기존 사용자: 새 버전 동의
 export async function consent(req: Request) {
-  if (!checkCsrf(req)) throw new HttpError(403, 'csrf');
+  // 로그인한 사람(약관 버전이 바뀜)은 CSRF 토큰까지, 가입 전에는 같은 사이트 요청인지만 확인
+  // (끝난 세션 쿠키가 남아 있어도 가입이 막히지 않도록 — 예: 같은 주소에서 돌던 다른 앱의 쿠키)
+  const s = await getSession(req);
+  if (s.user ? !checkCsrf(req) : !sameOrigin(req)) throw new HttpError(403, 'csrf');
   const b = await body(req);
   if (!CONSENT_TYPES.every((t) => b[t] === true)) throw new HttpError(400, 'consent_required');
   const db = await getDb();
-  const s = await getSession(req);
   if (s.user) {
     await db.tx((tx) => saveConsents(tx, s.user!.id));
     return json({ ok: true });
@@ -106,7 +108,8 @@ export async function consent(req: Request) {
 
 // 동의하지 않고 취소: 받아 둔 Google 정보를 버림 (기존 사용자는 로그아웃)
 export async function consentCancel(req: Request) {
-  if (!checkCsrf(req)) throw new HttpError(403, 'csrf');
+  const s = await getSession(req);
+  if (s.user ? !checkCsrf(req) : !sameOrigin(req)) throw new HttpError(403, 'csrf');
   await endSession(req, 'logout');
   const h = new Headers();
   [clearCookie(PENDING_COOKIE), ...clearSession()].forEach((c) => h.append('set-cookie', c));
@@ -115,8 +118,8 @@ export async function consentCancel(req: Request) {
 
 // 로그아웃 { reason: 'idle' | 'manual' }
 export async function logout(req: Request) {
-  if (!checkCsrf(req)) throw new HttpError(403, 'csrf');
   const s = await getSession(req);
+  if (s.user ? !checkCsrf(req) : !sameOrigin(req)) throw new HttpError(403, 'csrf');
   const idle = (await body(req)).reason === 'idle';
   await endSession(req, idle ? 'idle' : 'logout');
   if (s.user) await logAccess(req, idle ? 'idle_logout' : 'logout', s.user.id);

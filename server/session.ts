@@ -81,6 +81,12 @@ export async function getSession(req: Request): Promise<Session | { user: null; 
   };
 }
 
+// 같은 사이트의 화면에서 보낸 요청인지 (Origin 머리글)
+export function sameOrigin(req: Request): boolean {
+  const origin = req.headers.get('origin');
+  return !!origin && (origin === appOrigin(req) || origin === new URL(req.url).origin);
+}
+
 // 상태를 바꾸는 요청: 같은 사이트에서 왔고, CSRF 토큰이 세션과 맞아야 함
 export function checkCsrf(req: Request): boolean {
   if (req.method === 'GET' || req.method === 'HEAD') return true;
