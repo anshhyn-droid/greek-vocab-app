@@ -4,7 +4,10 @@ import AppLayout from '../components/book/AppLayout';
 import { AuthProvider, useAuth } from '../lib/auth';
 import { IdleWatcher } from '../lib/idle';
 import DataCheck from '../screens/DataCheck';
+import Home from '../screens/Home';
+import LessonMenu from '../screens/LessonMenu';
 import Placeholder from '../screens/Placeholder';
+import StudyPlaceholder from '../screens/StudyPlaceholder';
 import Start from '../screens/Start';
 
 // 로그인(약관 동의까지)한 사람만. 아니면 첫 화면으로
@@ -31,7 +34,9 @@ export default function App() {
           <Route path="/data-check" element={<DataCheck />} />
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
-              <Route path="/learn" element={<Placeholder title="학습" />} />
+              <Route path="/learn" element={<Home />} />
+              <Route path="/learn/:n" element={<LessonMenu />} />
+              <Route path="/study/:n/:type" element={<StudyPlaceholder />} />
               <Route path="/test" element={<Placeholder title="테스트" />} />
               <Route path="/me" element={<Placeholder title="마이페이지" />} />
             </Route>

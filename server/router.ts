@@ -1,6 +1,7 @@
 // /api 요청을 처리 함수로 보냄 (Vercel 함수 api/index.ts와 개발 서버가 함께 씀)
 import { HttpError, json } from './http.js';
 import { consent, consentCancel, googleCallback, googleStart, logout, me } from './routes/auth.js';
+import { clearLesson, home, setGoals } from './routes/home.js';
 
 type Handler = (req: Request) => Promise<Response>;
 
@@ -11,6 +12,9 @@ const ROUTES: Record<string, Handler> = {
   'DELETE /api/auth/consent': consentCancel,
   'POST /api/auth/logout': logout,
   'GET /api/me': me,
+  'GET /api/home': home,
+  'PATCH /api/goals': setGoals,
+  'DELETE /api/progress': clearLesson,
 };
 
 export async function route(req: Request): Promise<Response> {

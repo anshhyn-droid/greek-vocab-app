@@ -1,0 +1,113 @@
+/* ── 컴퓨터 왼쪽 쪽 ── */
+.left { flex: 1; display: flex; flex-direction: column; gap: 6px; min-height: 100%; }
+.curRow { display: flex; gap: 24px; align-items: stretch; }
+/* 책갈피: 종이 위 끝(쪽 여백 40px 위)에서 내려와, 옆 과 이름·진도 줄 높이에 맞춰 끝남 */
+.ribbon { position: relative; flex: none; align-self: stretch; margin: -40px 0 -12px; min-height: 290px; z-index: 2; filter: drop-shadow(0 8px 6px rgba(30, 14, 4, .2)) drop-shadow(0 1px 1px rgba(30, 14, 4, .28)); }
+.ribbonBody {
+  position: relative; display: block; width: 100%; height: 100%;
+  border-radius: 0 0 0 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 40px), 50% 100%, 0 calc(100% - 40px));
+  background: var(--leather-tex), #a85c2b;
+}
+.stitch { position: absolute; inset: 0 9px auto 9px; height: calc(100% - 69px); border: 1.5px dashed rgba(255, 244, 224, .42); border-top: none; border-bottom: none; }
+.stitchTip { position: absolute; left: 0; bottom: 0; display: block; overflow: visible; }
+.ribbonInner { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 64px 0 52px; color: #fff4e0; }
+.rLabel { font: 700 12px 'Pretendard Variable', Pretendard, sans-serif; letter-spacing: .14em; }
+.rRule { width: 40px; height: 1px; background: rgba(255, 244, 224, .45); }
+.rNum { display: flex; align-items: baseline; gap: 2px; font: 700 20px 'Hahmlet', serif; }
+.rNum b { font: 700 54px/1 'Hahmlet', serif; }
+.rGo { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; font: 700 14px/1.4 'Pretendard Variable', Pretendard, sans-serif; text-align: center; }
+.rArrow { width: 38px; height: 38px; border-radius: 999px; background: #fff4e0; display: flex; align-items: center; justify-content: center; font: 800 20px 'Pretendard Variable', Pretendard, sans-serif; color: #8c491a; }
+
+.curText { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; padding-bottom: 6px; }
+.curName { font: 700 38px 'Hahmlet', serif; color: var(--ink); word-break: keep-all; line-height: 1.2; }
+
+.steps { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+.steps[data-small='true'] { margin-top: 10px; gap: 13px; }
+.step { display: flex; align-items: center; gap: 8px; font: 700 16px 'Pretendard Variable', Pretendard, sans-serif; text-align: left; }
+.steps[data-small='true'] .step { font-size: 14px; }
+.step:hover { opacity: .75; }
+.stepK { flex: none; white-space: nowrap; color: var(--ink); }
+.dots { flex: 1; border-bottom: 2.5px dotted; transform: translateY(3px); }
+.check { width: 20px; height: 20px; flex: none; border-radius: 999px; background: var(--sage-soft); display: flex; align-items: center; justify-content: center; font: 800 11px 'Pretendard Variable', Pretendard, sans-serif; color: var(--sage-ink); }
+.mini { width: 20px; height: 20px; flex: none; display: flex; justify-content: center; }
+.mini span { width: 13px; height: 20px; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 74%, 0 100%); }
+
+.goalWrap { margin-top: auto; padding-top: 16px; border-top: 2.5px dotted rgba(140, 73, 26, .3); }
+.goal { display: flex; flex-direction: column; gap: 10px; }
+.goalHead { display: flex; align-items: center; gap: 10px; }
+.goalTitle { font: 700 18px 'Hahmlet', serif; white-space: nowrap; }
+.goalShort { font: 700 15px 'Pretendard Variable', Pretendard, sans-serif; color: var(--accent-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.edit { margin-left: auto; flex: none; white-space: nowrap; padding: 5px 13px; border-radius: 999px; border: 1.5px solid rgba(140, 73, 26, .3); font: 700 12px 'Pretendard Variable', Pretendard, sans-serif; color: var(--muted); }
+.edit:hover { color: var(--ink); background: rgba(140, 73, 26, .06); }
+.bar { height: 8px; border-radius: 999px; background: rgba(140, 73, 26, .12); overflow: hidden; }
+.bar > div { height: 100%; border-radius: 999px; background: var(--accent); transition: width .4s; }
+.goalRows { display: flex; flex-direction: column; gap: 7px; }
+.goalRow { display: grid; grid-template-columns: 40px minmax(0, 1fr) 62px; align-items: center; gap: 12px; }
+.goalRow > span { font: 700 14px 'Pretendard Variable', Pretendard, sans-serif; }
+.goalRow > b { justify-self: end; font: 700 13px 'Pretendard Variable', Pretendard, sans-serif; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.miniBar { height: 6px; border-radius: 999px; background: rgba(140, 73, 26, .1); overflow: hidden; }
+.miniBar > div { height: 100%; border-radius: 999px; transition: width .4s; }
+
+/* ── 컴퓨터 오른쪽 쪽: 목차 (책 안에서만 스크롤) ── */
+.tocWrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+.tocTitle { font: 700 22px 'Hahmlet', serif; }
+.tocList { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 2px; margin: 0 -24px 0 -12px; padding: 0 24px 90px 12px; }
+.fade { position: absolute; left: -52px; right: -36px; bottom: 0; height: 90px; background: linear-gradient(rgba(255, 250, 241, 0), #fbf4e6 85%); z-index: 1; pointer-events: none; }
+.tocRow { flex: none; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 7px 12px; margin: 0 -12px; border-radius: 12px; text-align: left; }
+.tocRow[data-cur='true'] { background: var(--accent-soft); }
+.tocRow:hover { background: rgba(140, 73, 26, .06); }
+.tocRow[data-ready='false'] { opacity: .5; }
+.tocN { width: 24px; flex: none; font: 700 15px 'Hahmlet', serif; }
+.tocT { flex: 0 1 auto; min-width: 64px; font-size: 14px; font-family: 'Pretendard Variable', Pretendard, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.segs { flex: 1 1 36px; min-width: 36px; display: flex; gap: 4px; transform: translateY(4px); }
+.segs span { flex: 1; border-bottom: 2.5px dotted; }
+
+/* ── 폰 ── */
+.phone { display: flex; flex-direction: column; gap: 14px; }
+.box { padding: 14px 16px; border-radius: 22px; background: var(--soft-bg); }
+.goal[data-phone='true'] .goalTitle { font: 700 15px 'Pretendard Variable', Pretendard, sans-serif; }
+.goal[data-phone='true'] .goalShort { margin-left: auto; font-size: 14px; }
+.goal[data-phone='true'] .edit { margin-left: 0; padding: 4px 11px; border-color: var(--line); }
+.goal[data-phone='true'] .bar { background: var(--line); }
+.chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.chip { min-width: 0; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 7px 4px; border-radius: 14px; background: rgba(140, 73, 26, .06); color: var(--muted); }
+.chip span { font: 700 12px 'Pretendard Variable', Pretendard, sans-serif; }
+.chip b { font: 700 13px 'Pretendard Variable', Pretendard, sans-serif; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip[data-full='true'] { background: var(--sage-soft); color: var(--sage-ink); }
+.curBox { position: relative; margin-top: 8px; padding: 22px 16px 22px 116px; min-height: 220px; display: flex; flex-direction: column; gap: 6px; }
+.mRibbon { position: absolute; top: -22px; left: 14px; width: 86px; height: calc(100% + 14px); z-index: 2; filter: drop-shadow(0 6px 5px rgba(30, 14, 4, .2)) drop-shadow(0 1px 1px rgba(30, 14, 4, .28)); }
+.ribbonBody[data-small='true'] { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), 50% 100%, 0 calc(100% - 26px)); }
+.stitchSmall { position: absolute; inset: 0 6px auto 6px; height: calc(100% - 40px); border: 1.5px dashed rgba(255, 244, 224, .42); border-top: none; border-bottom: none; }
+.ribbonBody[data-small='true'] .ribbonInner { gap: 6px; padding: 24px 0 40px; }
+.ribbonBody[data-small='true'] .rLabel { font-size: 10px; letter-spacing: .1em; }
+.ribbonBody[data-small='true'] .rNum { font-size: 15px; gap: 1px; }
+.ribbonBody[data-small='true'] .rNum b { font-size: 40px; }
+.ribbonBody[data-small='true'] .rGo { gap: 7px; font-size: 12px; line-height: 1.35; }
+.ribbonBody[data-small='true'] .rArrow { width: 32px; height: 32px; font-size: 15px; }
+.mCurName { font: 700 26px 'Hahmlet', serif; word-break: keep-all; }
+.mToc { padding: 16px 18px; display: flex; flex-direction: column; gap: 2px; }
+.mToc .tocRow { padding: 8px 12px; }
+.mToc .tocN { font-size: 14px; }
+.mToc .tocT { font-size: 13px; }
+.mToc .segs { flex: 1 1 30px; min-width: 30px; }
+.mTocHead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.mTocHead span { font: 700 18px 'Hahmlet', serif; }
+.mTocHead b { font: 700 12px 'Pretendard Variable', Pretendard, sans-serif; color: var(--muted); }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 40; padding: 12px 20px; border-radius: 999px; background: var(--ink); color: #fffaf1; font: 700 14px var(--f-body); white-space: nowrap; animation: pop .2s ease-out; }
+
+/* 낮은 책 */
+.ribbon[data-compact='true'] { min-height: 214px; }
+.ribbonBody[data-compact='true'] .ribbonInner { gap: 6px; padding: 30px 0 46px; }
+.ribbonBody[data-compact='true'] .rNum b { font-size: 40px; }
+.ribbonBody[data-compact='true'] .rNum { font-size: 16px; }
+.ribbonBody[data-compact='true'] .rGo { gap: 6px; font-size: 12px; }
+.ribbonBody[data-compact='true'] .rArrow { width: 30px; height: 30px; font-size: 16px; }
+.left[data-compact='true'] .curName { font-size: 30px; }
+.left[data-compact='true'] .steps { margin-top: 12px; gap: 9px; }
+.left[data-compact='true'] .step { font-size: 14px; }
+.left[data-compact='true'] .goalWrap { padding-top: 10px; }
+.left[data-compact='true'] .goal { gap: 7px; }
+.left[data-compact='true'] .goalTitle { font-size: 16px; }
+.left[data-compact='true'] .goalRows { gap: 4px; }
