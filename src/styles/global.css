@@ -1,0 +1,61 @@
+/* 공통 규칙의 색·글꼴 (steps/00_공통규칙.md) */
+@import './greek-font.css';
+
+:root {
+  --ground: #f5ead8;
+  --card: #fffaf1;
+  --tile: #fffdf8;
+  --ink: #201e1d;
+  --muted: oklch(.455 .018 45);
+  --line: #e8dcc6;
+  --accent: #c67139;
+  --accent-soft: #ffe1d0;
+  --accent-ink: #8c491a;
+  --btn: #a85c2b;
+  --btn-hover: #8a4720;
+  --on-accent: oklch(.975 .006 85);
+  --sage: #7a8a5e;
+  --sage-soft: #e1eecc;
+  --sage-ink: #56633f;
+  --wrong: #c0453a;
+  --wrong-soft: #fbe4e0;
+  --wrong-ink: #9b2f27;
+  --leather: #643312;
+  --gold: #d6b673;
+  --soft-bg: rgba(140, 73, 26, .05); /* 묶음 칸의 옅은 바탕 */
+
+  /* 헬라어 글자는 어디서나 'Gentium Greek'(= Gentium Book Plus)로, 나머지는 다음 글꼴로 넘어감 */
+  --f-title: 'Gentium Greek', 'Hahmlet', serif;
+  --f-body: 'Gentium Greek', 'Pretendard Variable', Pretendard, sans-serif;
+  --f-greek: 'Gentium Book Plus', Georgia, serif;
+
+  /* 폰 노치·홈 막대 자리 */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; scrollbar-width: none; }
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .title { font-family: var(--f-title); font-weight: 700; }
+.gk { font-family: var(--f-greek); }
+
+a { color: var(--accent-ink); text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+/* 쪽 안 스크롤: 스크롤바는 숨김 */
+.scroll-hidden { overflow: auto; scrollbar-width: none; }
+.scroll-hidden::-webkit-scrollbar { display: none; }
+
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }

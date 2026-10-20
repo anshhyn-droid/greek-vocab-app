@@ -1,0 +1,73 @@
+/* 헬라어 글자(U+0370–03FF, U+1F00–1FFF)만 Gentium Book Plus로 그리는 별칭. 글꼴 목록 맨 앞에 두면 한글·영문은 다음 글꼴로 넘어감 */
+/* greek-ext */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFN2-RHBgUK5fbjKxRpbBtJPyRpocKdT73mqfPV.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFN2-RHBgUK5fbjKxRpbBtJPyRpocKdT7LmqfPV.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFA2-RHBgUK5fbjKxRpbBtJPyRpocKdRwrDvMD0eIe1.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFA2-RHBgUK5fbjKxRpbBtJPyRpocKdRwrDvM_0eIe1.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFL2-RHBgUK5fbjKxRpbBtJPyRpocKUf7P-rQ.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFL2-RHBgUK5fbjKxRpbBtJPyRpocKbf7P-rQ.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFO2-RHBgUK5fbjKxRpbBtJPyRpocojWqbNjM7sfA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Gentium Greek';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/gentiumbookplus/v1/vEFO2-RHBgUK5fbjKxRpbBtJPyRpocojWqbCjM7sfA.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
