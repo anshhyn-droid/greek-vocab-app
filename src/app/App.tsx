@@ -7,7 +7,7 @@ import DataCheck from '../screens/DataCheck';
 import Home from '../screens/Home';
 import LessonMenu from '../screens/LessonMenu';
 import Placeholder from '../screens/Placeholder';
-import StudyPlaceholder from '../screens/StudyPlaceholder';
+import StudyRoute from '../screens/study/StudyRoute';
 import Start from '../screens/Start';
 
 // 로그인(약관 동의까지)한 사람만. 아니면 첫 화면으로
@@ -36,7 +36,7 @@ export default function App() {
             <Route element={<AppLayout />}>
               <Route path="/learn" element={<Home />} />
               <Route path="/learn/:n" element={<LessonMenu />} />
-              <Route path="/study/:n/:type" element={<StudyPlaceholder />} />
+              <Route path="/study/:n/:type" element={<StudyRoute />} />
               <Route path="/test" element={<Placeholder title="테스트" />} />
               <Route path="/me" element={<Placeholder title="마이페이지" />} />
             </Route>

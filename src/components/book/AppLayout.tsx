@@ -32,7 +32,7 @@ export default function AppLayout() {
           </div>
           <nav className={styles.tabBar} aria-label="메뉴">
             {TABS.map((t) => (
-              <button key={t.k} onClick={() => goTab(t.to)} className={styles.tabBarItem} data-on={t.k === active} aria-current={t.k === active ? 'page' : undefined}>
+              <button key={t.k} onClick={() => goTab(t.to)} className={styles.tabBarItem} data-on={t.k === active} data-xp-target={t.k === active} aria-current={t.k === active ? 'page' : undefined}>
                 <t.icon size={21} strokeWidth={2.75} />
                 <span>{t.label}</span>
               </button>
@@ -46,7 +46,7 @@ export default function AppLayout() {
         >
           <nav className={styles.tabs} aria-label="메뉴">
             {TABS.map((t) => (
-              <button key={t.k} onClick={() => goTab(t.to)} className={styles.tab} data-on={t.k === active} aria-current={t.k === active ? 'page' : undefined} title={t.label}>
+              <button key={t.k} onClick={() => goTab(t.to)} className={styles.tab} data-on={t.k === active} data-xp-target={t.k === active} aria-current={t.k === active ? 'page' : undefined} title={t.label}>
                 {/* 낮은 책에서는 탭 글자를 줄여 탭 안에 들어가게 */}
                 <span style={size.BH < 600 ? { fontSize: 15 } : undefined}>{t.label}</span>
               </button>

@@ -2,10 +2,12 @@
 export class ApiError extends Error {
   status: number;
   code: string;
-  constructor(status: number, code: string) {
+  data: unknown;
+  constructor(status: number, code: string, data?: unknown) {
     super(code);
     this.status = status;
     this.code = code;
+    this.data = data;
   }
 }
 
@@ -25,7 +27,7 @@ export async function api<T = unknown>(path: string, opts: { method?: string; bo
   if (!res.ok) {
     const code = (data as { error?: string }).error || 'http_' + res.status;
     if (res.status === 401 && path !== '/api/auth/consent') onUnauthorized?.(code);
-    throw new ApiError(res.status, code);
+    throw new ApiError(res.status, code, data);
   }
   return data as T;
 }
