@@ -8,24 +8,28 @@ import { CONSENT_TYPES, useAuth } from '../lib/auth';
 import { DOCS, type DocKind } from '../lib/docs';
 import { LOGOUT_REASON } from '../lib/idle';
 import { LS } from '../lib/storage';
-import { supabaseConfigured } from '../lib/supabase';
 import { useBookSize } from '../lib/viewport';
 import styles from './Start.module.css';
 
 const NOTICES: Record<string, string> = {
   idle: '하루 동안 사용하지 않아 로그아웃되었어요. 다시 로그인해 주세요.',
+  login: '로그인하지 못했습니다. 다시 시도해 주세요.',
+  config: 'Google 로그인 설정이 아직 없습니다 (.env)',
   withdrawn: '탈퇴가 완료되었습니다. 계정과 학습 기록이 모두 삭제되었습니다.',
 };
 
 export default function Start() {
-  const { status, signIn, error } = useAuth();
+  const { status, signIn } = useAuth();
   const navigate = useNavigate();
   const size = useBookSize();
   const [open, setOpen] = useState(false);
   const [signing, setSigning] = useState(false);
   const [notice, setNotice] = useState<string | null>(() => {
-    const r = LS.get(LOGOUT_REASON);
+    // 로그인 실패(?error=…) 또는 지난 로그아웃 이유
+    const q = new URLSearchParams(window.location.search).get('error');
+    const r = q || LS.get(LOGOUT_REASON);
     LS.remove(LOGOUT_REASON);
+    if (q) window.history.replaceState(null, '', '/');
     return r ? NOTICES[r] ?? null : null;
   });
 
@@ -41,11 +45,10 @@ export default function Start() {
     if (consent || signing || (e.target as HTMLElement).closest('[data-nobook]')) return;
     setOpen((o) => !o);
   };
-  const login = async (e: MouseEvent) => {
+  const login = (e: MouseEvent) => {
     e.stopPropagation();
-    if (!supabaseConfigured) return;
     setSigning(true);
-    await signIn();
+    signIn();
   };
 
   const firstPage = (
@@ -54,14 +57,12 @@ export default function Start() {
       <span className={styles.rule} />
       <span className={styles.title}>ΛΟΓΟΣ</span>
       {isOpen && !signing && !consent && (
-        <button data-nobook="1" onClick={login} className={styles.google} disabled={!supabaseConfigured}>
+        <button data-nobook="1" onClick={login} className={styles.google}>
           <GoogleMark />
           Google로 계속하기
         </button>
       )}
       {signing && <span className={styles.waiting}>Google 창으로 이동하는 중…</span>}
-      {!supabaseConfigured && isOpen && <span className={styles.waiting}>Supabase 설정이 아직 없습니다 (.env)</span>}
-      {error && <span className={styles.err}>로그인하지 못했습니다: {error}</span>}
     </>
   );
 
@@ -162,7 +163,7 @@ const CONSENTS: { k: (typeof CONSENT_TYPES)[number]; label: string; doc?: DocKin
 ];
 
 function ConsentDialog() {
-  const { acceptConsent, signOut } = useAuth();
+  const { acceptConsent, cancelConsent } = useAuth();
   const [on, setOn] = useState<Record<string, boolean>>({});
   const [detail, setDetail] = useState<string | null>(null);
   const [doc, setDoc] = useState<DocKind | null>(null);
@@ -182,7 +183,7 @@ function ConsentDialog() {
   };
   return (
     <>
-      <Dialog onClose={() => !busy && signOut()}>
+      <Dialog onClose={() => !busy && cancelConsent()}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <span className={styles.dTitle}>약관 동의</span>
           <span className={styles.dSub}>처음 가입할 때 한 번만 받습니다. 필수 항목에 모두 동의해야 가입됩니다.</span>

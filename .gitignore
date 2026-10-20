@@ -27,3 +27,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# 개발용 SQLite
+/data/local.sqlite*

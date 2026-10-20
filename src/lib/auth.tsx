@@ -1,12 +1,9 @@
-// 로그인 상태. Google 로그인(Supabase OAuth) → 처음이면 약관 동의 → 가입(users·설정·목표 기본 행)
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { Session } from '@supabase/supabase-js';
-import { supabase, supabaseConfigured } from './supabase';
-import { LS } from './storage';
+// 로그인 상태 (서버 세션). Google 로그인 → 처음이면 약관 동의 → 가입
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { api, setUnauthorizedHandler } from './api';
 import { IDLE_MS, LAST_ACTIVE, LOGOUT_REASON, markActive } from './idle';
+import { LS } from './storage';
 
-// 약관·처리방침 문안을 바꾸면 버전을 올림 → 다음 로그인 때 다시 동의를 받음
-export const CONSENT_VERSION = '2026-10-18';
 export const CONSENT_TYPES = ['age', 'terms', 'privacy'] as const;
 
 export interface Profile {
@@ -20,12 +17,12 @@ type Reason = 'idle' | 'withdrawn' | 'manual';
 
 interface AuthValue {
   status: Status;
-  session: Session | null;
   profile: Profile | null;
-  error: string | null;
-  signIn: () => Promise<void>;
+  signIn: () => void;
   acceptConsent: () => Promise<void>;
+  cancelConsent: () => Promise<void>;
   signOut: (reason?: Reason) => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthValue | null>(null);
@@ -36,108 +33,74 @@ export function useAuth() {
   return v;
 }
 
-const googleSub = (s: Session) =>
-  s.user.identities?.find((i) => i.provider === 'google')?.id || (s.user.user_metadata?.sub as string) || s.user.id;
-const googleName = (s: Session) => {
-  const m = s.user.user_metadata || {};
-  return String(m.full_name || m.name || s.user.email?.split('@')[0] || '학습자').slice(0, 40);
-};
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [status, setStatus] = useState<Status>(supabaseConfigured ? 'loading' : 'signedOut');
+  const [status, setStatus] = useState<Status>('loading');
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
-  const signOut = useCallback(async (reason: Reason = 'manual') => {
-    await supabase.auth.signOut().catch(() => {});
-    // 기기에 남은 학습 정보를 지움
+  // 로그아웃 처리: 기기에 남은 학습 정보를 지우고, 이유가 있으면 다음 첫 화면에 안내
+  // 같은 로그아웃이 두 번 처리되지 않게 (두 번째가 지난 이유를 다시 남기면 다음 첫 화면에 또 안내가 뜸)
+  const out = useRef(false);
+  const finishSignOut = useCallback((reason: Reason) => {
+    if (out.current) return;
+    out.current = true;
     LS.wipe();
     if (reason !== 'manual') LS.set(LOGOUT_REASON, reason);
-    setSession(null);
     setProfile(null);
     setStatus('signedOut');
   }, []);
 
-  // 세션이 있으면: 가입(users)과 지금 버전 약관 동의를 확인
-  const resolve = useCallback(
-    async (s: Session | null) => {
-      setSession(s);
-      if (!s) {
-        setProfile(null);
-        setStatus('signedOut');
-        return;
-      }
-      // 하루 동안 사용하지 않았으면 로그아웃
-      const last = Number(LS.get(LAST_ACTIVE));
-      if (last && Date.now() - last > IDLE_MS) return signOut('idle');
-      if (!last) markActive();
-
-      const uid = s.user.id;
-      const [{ data: u, error: e1 }, { data: c, error: e2 }] = await Promise.all([
-        supabase.from('users').select('id,email,display_name').eq('id', uid).maybeSingle(),
-        supabase.from('user_consents').select('type').eq('user_id', uid).eq('version', CONSENT_VERSION).eq('agreed', true),
-      ]);
-      if (e1 || e2) {
-        setError((e1 || e2)!.message);
-        setStatus('signedOut');
-        return;
-      }
-      const agreed = new Set((c || []).map((r) => r.type));
-      if (u && CONSENT_TYPES.every((t) => agreed.has(t))) {
-        setProfile(u as Profile);
-        setStatus('ready');
-      } else {
-        setProfile(null);
-        setStatus('needsConsent');
-      }
+  const signOut = useCallback(
+    async (reason: Reason = 'manual') => {
+      if (out.current) return;
+      await api('/api/auth/logout', { method: 'POST', body: { reason } }).catch(() => {});
+      finishSignOut(reason);
     },
-    [signOut],
+    [finishSignOut],
   );
 
-  useEffect(() => {
-    if (!supabaseConfigured) return;
-    supabase.auth.getSession().then(({ data }) => resolve(data.session));
-    const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
-      // 토큰 갱신 같은 일은 다시 확인할 필요 없음
-      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') setTimeout(() => resolve(s), 0);
-    });
-    return () => sub.subscription.unsubscribe();
-  }, [resolve]);
-
-  const signIn = useCallback(async () => {
-    setError(null);
-    const { error: e } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + '/', queryParams: { prompt: 'select_account' } },
-    });
-    if (e) setError(e.message);
-  }, []);
-
-  // 약관 동의 → 가입: users, user_consents, user_settings, user_goals, user_stats 기본 행
-  const acceptConsent = useCallback(async () => {
-    if (!session) return;
-    const uid = session.user.id;
-    const now = new Date().toISOString();
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Seoul';
-    const steps = [
-      () => supabase.from('users').upsert({ id: uid, google_sub: googleSub(session), email: session.user.email, display_name: googleName(session), last_login_at: now }, { onConflict: 'id' }),
-      () => supabase.from('user_consents').upsert(CONSENT_TYPES.map((type) => ({ user_id: uid, type, version: CONSENT_VERSION, agreed: true, agreed_at: now })), { onConflict: 'user_id,type,version' }),
-      () => supabase.from('user_settings').upsert({ user_id: uid, font_size: 'm', timezone: tz }, { onConflict: 'user_id', ignoreDuplicates: true }),
-      () => supabase.from('user_goals').upsert({ user_id: uid }, { onConflict: 'user_id', ignoreDuplicates: true }),
-      () => supabase.from('user_stats').upsert({ user_id: uid }, { onConflict: 'user_id', ignoreDuplicates: true }),
-    ];
-    for (const run of steps) {
-      const { error: e } = await run();
-      if (e) {
-        setError(e.message);
-        throw e;
+  const refresh = useCallback(async () => {
+    try {
+      const r = await api<{ status: Status; profile?: Profile; reason?: string }>('/api/me');
+      if (r.status !== 'signedOut') out.current = false;
+      if (r.status === 'ready') {
+        // 이 기기에서 하루 넘게 움직임이 없었으면 로그아웃 (마지막 활동 = 클릭·키 입력)
+        const last = Number(LS.get(LAST_ACTIVE));
+        if (last && Date.now() - last > IDLE_MS) return signOut('idle');
+        if (!last) markActive();
+        setProfile(r.profile!);
+      } else {
+        setProfile(null);
+        if (r.reason === 'idle') finishSignOut('idle');
       }
+      setStatus(r.status);
+    } catch {
+      setStatus('signedOut');
     }
-    markActive();
-    await resolve(session);
-  }, [session, resolve]);
+  }, [signOut, finishSignOut]);
 
-  const value = useMemo(() => ({ status, session, profile, error, signIn, acceptConsent, signOut }), [status, session, profile, error, signIn, acceptConsent, signOut]);
+  useEffect(() => {
+    // 다른 API가 401(세션 끝)을 받으면 첫 화면으로
+    setUnauthorizedHandler((code) => finishSignOut(code === 'idle' ? 'idle' : 'manual'));
+    refresh();
+  }, [refresh, finishSignOut]);
+
+  // 서버의 Google 로그인 시작 주소로 이동
+  // eslint-disable-next-line react-hooks/immutability
+  const signIn = useCallback(() => { window.location.href = '/api/auth/google'; }, []);
+
+  const acceptConsent = useCallback(async () => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Seoul';
+    await api('/api/auth/consent', { method: 'POST', body: { age: true, terms: true, privacy: true, timezone: tz } });
+    out.current = false;
+    markActive();
+    await refresh();
+  }, [refresh]);
+
+  const cancelConsent = useCallback(async () => {
+    await api('/api/auth/consent', { method: 'DELETE' }).catch(() => {});
+    finishSignOut('manual');
+  }, [finishSignOut]);
+
+  const value = useMemo(() => ({ status, profile, signIn, acceptConsent, cancelConsent, signOut, refresh }), [status, profile, signIn, acceptConsent, cancelConsent, signOut, refresh]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
